@@ -60,7 +60,8 @@ double PACKAGE_HEIGHT = 2.0;
 double PACKAGE_BASE_RATIO = 0.90;
 double CLASS_BASE_RATIO = 0.70;
 
-double CLASS_MIN_HEIGHT = 10.0;
+double DEFAULT_CLASS_MIN_HEIGHT = 10.0;
+double CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
 double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6;
 
 boolean HIGHLIGHT_CHANGES_IS_CUMULATIVE = false;
@@ -77,6 +78,8 @@ float zRotation = 0.0;
 boolean mouseNavigationEnabled = false;
 int lastMouseX;
 int lastMouseY;
+
+boolean useLocForBoxHeight = false;
 
 ////////////////////////////////////////////////////////
 ///////////////////// Imports //////////////////////////
@@ -598,6 +601,15 @@ void keyPressed() {
       int parsedKey = Character.getNumericValue(key);
       float position = (((float)parsedKey)-1f)/9f;
       setCurrentVersion((int)(maxVersion*position));
+    }
+  }
+  else if (key == 'l') {
+    useLocForBoxHeight = !useLocForBoxHeight;
+    if (useLocForBoxHeight) {
+      CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
+    }
+    else {
+      CLASS_MIN_HEIGHT = 1;
     }
   }
   else if (key == 'p') {

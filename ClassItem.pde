@@ -188,7 +188,14 @@ class ClassItem extends SimpleMapItem {
     if (!HIDE_NON_SELECTED || this.isSelected() || this.hasChanged()) {
       double churn = getCurrentTweenInt("churn") - firstChurn;
 
-      double boxHeight = CLASS_MIN_HEIGHT + (churn / g_maxChurn) * CLASS_MAX_HEIGHT;
+      double boxHeight;
+      if (useLocForBoxHeight) {
+        double currentLocForHeight = getCurrentTweenInt("curr_loc");
+        boxHeight = 1 + (currentLocForHeight / g_maxChurn) * CLASS_MAX_HEIGHT;
+      }
+      else {
+        boxHeight = CLASS_MIN_HEIGHT + (churn / g_maxChurn) * CLASS_MAX_HEIGHT;
+      }
       if (boxHeight < 0) {
         boxHeight = 0;
       }
