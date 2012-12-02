@@ -71,6 +71,8 @@ float xRotation = 0.0;
 float yRotation = 0.0;
 float zRotation = 0.0;
 
+boolean mouseNavigationEnabled = false;
+
 ////////////////////////////////////////////////////////
 ///////////////////// Imports //////////////////////////
 ////////////////////////////////////////////////////////
@@ -340,6 +342,13 @@ void drawText() {
 void draw()
 {
   tweenVersion();
+  if (mouseNavigationEnabled) {
+    xRotation = ((float)mouseY)/50f;
+    println(zRotation);
+    
+    zRotation = -((float)mouseX)/50f;
+    println(xRotation);
+  }
   
   if (!USE_CAM) {
     background(255);
@@ -412,6 +421,7 @@ void draw()
 void mouseMoved() {
   int x = mouseX;
   int y = mouseY;
+  
   if (FLIPPED_CAM)
     x = width - x;
     
@@ -579,6 +589,9 @@ void keyPressed() {
     for (ClassItem item : getSelectedItems())
       item.toggleSelect();
   }
+  else if (key == CODED && keyCode == SHIFT) {
+    mouseNavigationEnabled = !mouseNavigationEnabled;
+  }  
 
 //  else if (key == 'c') {
 //    HIGHLIGHT_CHANGES_IS_CUMULATIVE = !HIGHLIGHT_CHANGES_IS_CUMULATIVE;
