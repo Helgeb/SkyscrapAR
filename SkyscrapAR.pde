@@ -581,6 +581,23 @@ void keyPressed() {
   }
   else if (key == 8) {
     setCurrentVersion(previousVisitedVersion);
+    println ("8!!");
+  }
+
+  else if (key >='0' && key <='9') {
+    // 1 = first, 0 = last version)
+    // 1=0%
+    // 2=1/9
+    // 9=8/9
+    // 0=9/9
+    if (key=='0'){
+      setCurrentVersion(maxVersion);
+    }
+    else {
+      int parsedKey = Character.getNumericValue(key);
+      float position = (((float)parsedKey)-1f)/9f;
+      setCurrentVersion((int)(maxVersion*position));
+    }
   }
   else if (key == 'p') {
     PERSISTENT_TREEMAP = !PERSISTENT_TREEMAP;
@@ -589,7 +606,7 @@ void keyPressed() {
     for (ClassItem item : getSelectedItems())
       item.toggleSelect();
   }
-  else if (key == CODED && keyCode == SHIFT) {
+  else if (key == 'q') {
     mouseNavigationEnabled = !mouseNavigationEnabled;
   }  
 
@@ -603,6 +620,12 @@ void keyPressed() {
     }
     else if (key == CODED && keyCode == LEFT) {
       setCurrentVersion(g_currentVersion - 1);
+    }
+    else if (key == CODED && keyCode == DOWN) {
+      setCurrentVersion(g_currentVersion - 10);
+    }
+    else if (key == CODED && keyCode == UP) {
+      setCurrentVersion(g_currentVersion + 10);
     }
     else if (key == 'x') {
       incXRotation(0.1);
@@ -631,6 +654,7 @@ void keyPressed() {
     else if (key == CODED && keyCode == LEFT) {
       nextVersionThatChangedAnySelectedItem(-1);
     }
+    
   }
 
 } 
