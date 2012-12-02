@@ -66,6 +66,9 @@ double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6;
 boolean HIGHLIGHT_CHANGES_IS_CUMULATIVE = false;
 
 double TWEENING_TIME_INTERVAL = 1000; // milliseconds
+
+float MOUSE_SPEED = 50;
+
 float zoomFactor = 1.2;
 float xRotation = 0.0;
 float yRotation = 0.0;
@@ -276,7 +279,6 @@ void applyZoom(float s) {
 }
 
 void applyXRotation(float angle) {
-  // s = ((float)mouseY) / ((float)200);
   float ct = cos(angle);
   float st = sin(angle);
   applyMatrix(  ct, 0.0,  st,  0.0,
@@ -286,7 +288,6 @@ void applyXRotation(float angle) {
 }
 
 void applyYRotation(float angle) {
-  // s = ((float)mouseY) / ((float)200);
   float ct = cos(angle);
   float st = sin(angle);
   applyMatrix(  1.0, 0.0,  0.0,  0.0,
@@ -296,7 +297,6 @@ void applyYRotation(float angle) {
 }
 
 void applyZRotation(float angle) {
-  // s = ((float)mouseY) / ((float)200);
   float ct = cos(angle);
   float st = sin(angle);
   applyMatrix(  ct, -st,  0.0,  0.0,
@@ -343,11 +343,8 @@ void draw()
 {
   tweenVersion();
   if (mouseNavigationEnabled) {
-    xRotation = ((float)mouseY)/50f;
-    println(zRotation);
-    
-    zRotation = -((float)mouseX)/50f;
-    println(xRotation);
+    xRotation = ((float)mouseY)/MOUSE_SPEED;    
+    zRotation = -((float)mouseX)/MOUSE_SPEED;
   }
   
   if (!USE_CAM) {
