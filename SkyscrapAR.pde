@@ -75,6 +75,8 @@ float yRotation = 0.0;
 float zRotation = 0.0;
 
 boolean mouseNavigationEnabled = false;
+int lastMouseX;
+int lastMouseY;
 
 ////////////////////////////////////////////////////////
 ///////////////////// Imports //////////////////////////
@@ -343,8 +345,10 @@ void draw()
 {
   tweenVersion();
   if (mouseNavigationEnabled) {
-    xRotation = ((float)mouseY)/MOUSE_SPEED;    
-    zRotation = -((float)mouseX)/MOUSE_SPEED;
+    incXRotation(-((lastMouseY - (float)mouseY)/MOUSE_SPEED));    
+    lastMouseY = mouseY;
+    incZRotation((lastMouseX - (float)mouseX)/MOUSE_SPEED);
+    lastMouseX = mouseX;
   }
   
   if (!USE_CAM) {
@@ -605,6 +609,8 @@ void keyPressed() {
   }
   else if (key == 'q') {
     mouseNavigationEnabled = !mouseNavigationEnabled;
+    lastMouseX = mouseX;
+    lastMouseY = mouseY;
   }  
 
 //  else if (key == 'c') {
