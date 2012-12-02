@@ -608,10 +608,10 @@ void keyPressed() {
   else if (key == 'l') {
     useLocForBoxHeight = !useLocForBoxHeight;
     if (useLocForBoxHeight) {
-      CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
+      CLASS_MIN_HEIGHT = 1;
     }
     else {
-      CLASS_MIN_HEIGHT = 1;
+      CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
     }
   }
   else if (key == 's') {
