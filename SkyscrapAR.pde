@@ -486,47 +486,29 @@ void incZoomFactor(float amount) {
   setZoomFactor(zoomFactor + amount);
 }
 
-void setXRotation(float factor) {
-  if (factor < 0.1)
-    factor = 0.1;
-  else if (factor > 30.0)
-    factor = 5.0;
-    
-  xRotation = factor;
-  println("xRotation = " + xRotation);
-}
-
 void incXRotation(float amount) {
-  setXRotation(xRotation + amount);
-}
-
-void setYRotation(float factor) {
-  if (factor < 0.1)
-    factor = 0.1;
-  else if (factor > 30.0)
-    factor = 5.0;
-    
-  yRotation = factor;
-  println("yRotation = " + yRotation);
+  xRotation = calculateIncreasedAngle(xRotation, amount);
 }
 
 void incYRotation(float amount) {
-  setYRotation(yRotation + amount);
-}
-
-void setZRotation(float factor) {
-  if (factor < 0.1)
-    factor = 0.1;
-  else if (factor > 30.0)
-    factor = 5.0;
-    
-  zRotation = factor;
-  println("zRotation = " + zRotation);
+  yRotation = calculateIncreasedAngle(yRotation, amount);
 }
 
 void incZRotation(float amount) {
-  setZRotation(zRotation + amount);
+  zRotation = calculateIncreasedAngle(zRotation, amount);
 }
+
+float calculateIncreasedAngle(float actualAngle, float delta) {
+  float result = actualAngle + delta;
+  if (result < 0)
+    result += TWO_PI;
+  else if (result > TWO_PI)
+    result -= TWO_PI;
+    
+  return result;  
+}
+
+
 
 Set<ClassItem> getSelectedItems() {
   Set<ClassItem> selected = new HashSet<ClassItem>();
