@@ -32,7 +32,7 @@ int THRESHOLD = 80; //45; //85; //110;
 double CONFIDENCE_THRESHOLD = 0.51; // default: 0.51
 boolean DEBUG = false;
 boolean USE_OPENGL = false;
-boolean USE_CAM = true;
+boolean USE_CAM = false;
 int WINDOW_WIDTH = 1000; //640;
 int WINDOW_HEIGHT = 750; //480;
 
@@ -67,6 +67,9 @@ boolean HIGHLIGHT_CHANGES_IS_CUMULATIVE = false;
 
 double TWEENING_TIME_INTERVAL = 1000; // milliseconds
 float zoomFactor = 1.2;
+float xRotation = 0.0;
+float yRotation = 0.0;
+float zRotation = 0.0;
 
 ////////////////////////////////////////////////////////
 ///////////////////// Imports //////////////////////////
@@ -224,6 +227,9 @@ void drawModelCube() {
 
 void drawModel() {
   applyZoom(zoomFactor);
+  applyXRotation(xRotation);
+  applyYRotation(yRotation);
+  applyZRotation(zRotation);
 //  drawModelCube();
   drawXmlTreemap3D();
 }
@@ -265,6 +271,36 @@ void applyZoom(float s) {
     0, s, 0, 0,
     0, 0, s, 0,
     0, 0, 0, 1);
+}
+
+void applyXRotation(float angle) {
+  // s = ((float)mouseY) / ((float)200);
+  float ct = cos(angle);
+  float st = sin(angle);
+  applyMatrix(  ct, 0.0,  st,  0.0,
+               0.0, 1.0, 0.0,  0.0,
+               -st, 0.0,  ct,  0.0,
+               0.0, 0.0, 0.0,  1.0);
+}
+
+void applyYRotation(float angle) {
+  // s = ((float)mouseY) / ((float)200);
+  float ct = cos(angle);
+  float st = sin(angle);
+  applyMatrix(  1.0, 0.0,  0.0,  0.0,
+               0.0, ct, -st,  0.0,
+               0.0, st,  ct,  0.0,
+               0.0, 0.0, 0.0,  1.0);
+}
+
+void applyZRotation(float angle) {
+  // s = ((float)mouseY) / ((float)200);
+  float ct = cos(angle);
+  float st = sin(angle);
+  applyMatrix(  ct, -st,  0.0,  0.0,
+               st, ct, 0.0,  0.0,
+               0.0, 0.0,  1.0,  0.0,
+               0.0, 0.0, 0.0,  1.0);
 }
 
 void drawOnLastMarker() {
@@ -450,6 +486,48 @@ void incZoomFactor(float amount) {
   setZoomFactor(zoomFactor + amount);
 }
 
+void setXRotation(float factor) {
+  if (factor < 0.1)
+    factor = 0.1;
+  else if (factor > 30.0)
+    factor = 5.0;
+    
+  xRotation = factor;
+  println("xRotation = " + xRotation);
+}
+
+void incXRotation(float amount) {
+  setXRotation(xRotation + amount);
+}
+
+void setYRotation(float factor) {
+  if (factor < 0.1)
+    factor = 0.1;
+  else if (factor > 30.0)
+    factor = 5.0;
+    
+  yRotation = factor;
+  println("yRotation = " + yRotation);
+}
+
+void incYRotation(float amount) {
+  setYRotation(yRotation + amount);
+}
+
+void setZRotation(float factor) {
+  if (factor < 0.1)
+    factor = 0.1;
+  else if (factor > 30.0)
+    factor = 5.0;
+    
+  zRotation = factor;
+  println("zRotation = " + zRotation);
+}
+
+void incZRotation(float amount) {
+  setZRotation(zRotation + amount);
+}
+
 Set<ClassItem> getSelectedItems() {
   Set<ClassItem> selected = new HashSet<ClassItem>();
   for (ClassItem item : g_treemapItems) {
@@ -531,6 +609,25 @@ void keyPressed() {
     else if (key == CODED && keyCode == LEFT) {
       setCurrentVersion(g_currentVersion - 1);
     }
+    else if (key == 'x') {
+      incXRotation(0.1);
+    }    
+    else if (key == 'X') {
+      incXRotation(-0.1);
+    }    
+    else if (key == 'y') {
+      incYRotation(0.1);
+    }    
+    else if (key == 'Y') {
+      incYRotation(-0.1);
+    }    
+    else if (key == 'a') {
+      incZRotation(0.1);
+    }    
+    else if (key == 'A') {
+      incZRotation(-0.1);
+    }    
+
   }
   else {
     if (key == CODED && keyCode == RIGHT) {
