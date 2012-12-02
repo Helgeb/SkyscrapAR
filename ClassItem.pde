@@ -196,6 +196,7 @@ class ClassItem extends SimpleMapItem {
       else {
         boxHeight = CLASS_MIN_HEIGHT + (churn / g_maxChurn) * CLASS_MAX_HEIGHT;
       }
+      boxHeight *= heightScale;
       if (boxHeight < 0) {
         boxHeight = 0;
       }

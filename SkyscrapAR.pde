@@ -80,6 +80,7 @@ int lastMouseX;
 int lastMouseY;
 
 boolean useLocForBoxHeight = false;
+float heightScale = 1.0;
 
 ////////////////////////////////////////////////////////
 ///////////////////// Imports //////////////////////////
@@ -341,7 +342,9 @@ void shadowedText(String str, float x, float y) {
 
 void drawText() {
   shadowedText(titleString, 10, 32);
-  shadowedText(commitLog.getAuthor() + "\nv" + g_currentVersion + " of " + maxVersion + ": " + commitLog.getMessage(), 10, height - 30);
+  String mode = " (scale=" + heightScale + " LOC-mode=" + useLocForBoxHeight + ")";
+  shadowedText(commitLog.getAuthor() + mode +  "\nv" + g_currentVersion + " of " + maxVersion + ": " +
+    commitLog.getMessage(), 10, height - 30);
 }
 
 void draw()
@@ -587,7 +590,6 @@ void keyPressed() {
     setCurrentVersion(previousVisitedVersion);
     println ("8!!");
   }
-
   else if (key >='0' && key <='9') {
     // 1 = first, 0 = last version)
     // 1=0%
@@ -612,6 +614,12 @@ void keyPressed() {
       CLASS_MIN_HEIGHT = 1;
     }
   }
+  else if (key == 's') {
+    heightScale -= 0.1;
+  }
+  else if (key == 'S') {
+    heightScale += 0.1;
+  }  
   else if (key == 'p') {
     PERSISTENT_TREEMAP = !PERSISTENT_TREEMAP;
   }
