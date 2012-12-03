@@ -32,18 +32,18 @@ class PackageItem extends ClassItem implements MapModel {
       
       XMLElement elem = contents[i];
       ClassItem newItem = null;
-      if (elem.getName().equals("class")) {
-        newItem = new ClassItem(this, elem, level+1);
+      if (shouldElementBeIncluded(this.fullName, elem)) { 
+        if (elem.getName().equals("class")) {
+          newItem = new ClassItem(this, elem, level+1);
+        }
+        else {  
+          newItem = new PackageItem(this, elem, level+1);
+        }
       }
       else {
-        if (this.fullName==null || (!(fullNameOfNestedElement(this.fullName, elem).equals("com.xyz")))) {
-        
-            newItem = new PackageItem(this, elem, level+1);
-        }
-        else {
           println("----------------------------------------------- ignoring " + elem.getString("name"));
-        }
       }
+ 
       if (newItem != null) { 
         items[count++] = newItem;
         size += newItem.getSize();
@@ -56,6 +56,18 @@ class PackageItem extends ClassItem implements MapModel {
       }
       items = filteredItems;
     }
+  }
+  
+  boolean shouldElementBeIncluded(String path, XMLElement elem) {
+    if (path==null)
+      return true;
+      
+    for (String excludedElement : excludedElements) {
+      if (fullNameOfNestedElement(this.fullName, elem).equals(excludedElement)) {
+        return false;
+      }
+    }
+    return true;
   }
   
   String fullNameOfNestedElement(String path, XMLElement nextElement) {

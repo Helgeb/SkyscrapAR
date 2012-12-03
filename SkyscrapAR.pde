@@ -1,6 +1,11 @@
 //String INPUT_FILENAME = "awatility.xml";
 //String INPUT_FILENAME = "prefuse.xml";
-String INPUT_FILENAME = "junit.xml";
+//String INPUT_FILENAME = "junit.xml";
+String INPUT_FILENAME = "../SkyscrapAR-extractor/SCMtoXML2.xml";
+
+String[] excludedElements = {"com.xyz.mypackagetoexclude", "com.abc.MyClassToExclude"};
+
+
 /*
 TODO list
 =========
