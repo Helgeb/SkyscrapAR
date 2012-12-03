@@ -22,6 +22,7 @@ class PackageItem extends ClassItem implements MapModel {
     if (level > maxPackageLevel)
       maxPackageLevel = level;
     
+    println("-->" + this.fullName);
     g_treemapItems.add(this);
 
     XMLElement[] contents = folder.getChildren();
@@ -35,12 +36,30 @@ class PackageItem extends ClassItem implements MapModel {
         newItem = new ClassItem(this, elem, level+1);
       }
       else {
-        newItem = new PackageItem(this, elem, level+1);
+        if (this.fullName==null || (!(fullNameOfNestedElement(this.fullName, elem).equals("com.xyz")))) {
+        
+            newItem = new PackageItem(this, elem, level+1);
+        }
+        else {
+          println("----------------------------------------------- ignoring " + elem.getString("name"));
+        }
       }
-       
-      items[count++] = newItem;
-      size += newItem.getSize();
+      if (newItem != null) { 
+        items[count++] = newItem;
+        size += newItem.getSize();
+      }
     }
+    if (count < items.length ) {
+      Mappable[] filteredItems = new Mappable[count];
+      for (int i=0; i<count; i++) {
+        filteredItems[i] = items [i];
+      }
+      items = filteredItems;
+    }
+  }
+  
+  String fullNameOfNestedElement(String path, XMLElement nextElement) {
+    return path + "." + nextElement.getString("name");
   }
   
   /* MapModel interface */
@@ -49,6 +68,9 @@ class PackageItem extends ClassItem implements MapModel {
   }
 
   int getItemCount() {
+    if (items == null){
+      return 0;
+    }
     return items.length;
   }
   
