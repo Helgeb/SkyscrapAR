@@ -4,20 +4,17 @@ class ClassItem extends SimpleMapItem {
   int index = -1;
   String type;
   String name;
-  String fullName;
   
-  int[] churns;
+  int[] methods;
   int[] locs;
-  int[] changeds;
-  int firstChurn = 0;
+  int firstMethods = 0;
   int firstClassVersion;
   
   PackageItem parent;
   int level;
   XMLElement xmlElement;
   
-  ClassItem() {
-  }
+  ClassItem() { }
 
   ClassItem(PackageItem parent, XMLElement elem, int level) {
     this.type = elem.getString("type");
@@ -26,58 +23,47 @@ class ClassItem extends SimpleMapItem {
     this.level = level;
     this.index = g_treemapItems.size();
     this.name = elem.getString("name");
-    
-    if (parent == null || parent.name == null)
-      this.fullName = this.name;
-    else
-      this.fullName = parent.fullName + "." + this.name;
-    
+        
     g_treemapItems.add(this);
     
-    int maxloc = 0;
+    int maxMethods = 0;
     XMLElement[] versions = elem.getChildren();
     int lastVersion = versions[versions.length-1].getInt("num");
-    println("lastVersion = " + lastVersion);
     
     locs = new int[lastVersion];
-    churns = new int[lastVersion];
-    changeds = new int[lastVersion];
-    
-    println("Loading " + this.name);
-    
+    methods = new int[lastVersion];
+        
     int lastNum = -1;
     int lastLoc = 0;
-    int lastChurn = 0;
+    int lastMethods = 0;
     for (XMLElement version : versions) {
       int num = version.getInt("num") - 1;
       
-      locs[num] = version.getInt("curr_loc");
-      churns[num] = version.getInt("churn");
-      changeds[num] = 1; //version.getInt("changed");
+      locs[num] = version.getInt("avloc");
+      methods[num] = version.getInt("methods");
       
       for (int i = lastNum+1; i < num; i++) {
         locs[i] = lastLoc;
-        churns[i] = lastChurn;
-        changeds[i] = 0;
+        methods[i] = lastMethods;
       }
       
       lastNum = num;
       lastLoc = locs[num];
-      lastChurn = churns[num];
+      lastMethods = methods[num];
     
-      if (firstChurn == 0) {
-        firstChurn = lastChurn;
+      if (firstMethods == 0) {
+        firstMethods = lastMethods;
         firstClassVersion = num+1;
       }
-      
-      if (lastLoc > maxloc)
-        maxloc = lastLoc;
+              
+      if (lastMethods > maxMethods)
+        maxMethods = lastMethods;
         
-      if (lastChurn > g_maxChurn)
-        g_maxChurn = lastChurn;
+      if (lastLoc > g_maxLoc)
+        g_maxLoc = lastLoc;
     }
     
-    setSize(maxloc);
+    setSize(maxMethods);
     
     this.currentColor = CLASS_DEFAULT_COLOR;
   }
@@ -105,31 +91,7 @@ class ClassItem extends SimpleMapItem {
     box((float)(w*baseRatio), (float)(h*baseRatio), (float)zz);
     translate(-a, -b, -c);
   }
-  
-  double getMaxLoc() {
-    return this.getSize();
-  }
-
-  boolean hasChangedInVersion(int v) {
-    return getIntForVersion("changed", v) != 0;
-  }
-  
-  boolean hasChanged() {
-    if (g_currentVersion == g_firstVersion)
-      return false;
       
-    if (!HIGHLIGHT_CHANGES_IS_CUMULATIVE) {
-      return getIntBetweenVersions("changed", g_currentVersion) != 0;
-    }
-    else {
-      for (int i = g_firstVersion + 1; i <= g_currentVersion; i++) {
-        if (getIntBetweenVersions("changed", i) != 0)
-          return true;
-      }
-      return false;
-    }
-  }
-  
   int getIntForVersion(String attr, int version) {
     version = version - 1;
     int v = version;
@@ -137,45 +99,19 @@ class ClassItem extends SimpleMapItem {
       v = locs.length - 1;
     }
     
-    if (attr.equals("curr_loc"))
+    if (attr.equals("avloc"))
       return locs[v];
-    else if (attr.equals("churn")) {
-      if (version+1 < firstClassVersion)
-        return churns[firstClassVersion-1];
-      else
-        return churns[v];
-    }
-    else if (attr.equals("changed")) {
-      if (version > locs.length)
-        return 0;
-      else
-        return changeds[v];
+    else if (attr.equals("methods")) {
+      return methods[v];
     }
     else
       throw new RuntimeException("Error");
-      
-//    return getVersion(version).getInt(attr);
   }
   
   int getIntForCurrentVersion(String attr) {
     return getIntForVersion(attr, g_currentVersion);
   }
   
-  double getIntBetweenVersions(String attr, double version) {
-    int version1 = floor((float)version);
-    int version2 = ceil((float)version);
-    double alpha = version - version1;
-    
-    int value1 = getIntForVersion(attr, version1);
-    int value2 = getIntForVersion(attr, version2);
-    
-    return (1-alpha)*value1 + alpha*value2;
-  }
-  
-  double getCurrentTweenInt(String attr) {
-    return getIntBetweenVersions(attr,  g_tweeningVersion);
-  }
-
   void draw() {
     Rect bounds = this.getBounds();
     
@@ -185,34 +121,22 @@ class ClassItem extends SimpleMapItem {
     // box for largest version
     boxWithBounds(bounds.x, bounds.y, (level - 1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 0.02, CLASS_BASE_RATIO);
     
-    if (!HIDE_NON_SELECTED || this.isSelected() || this.hasChanged()) {
-      double churn = getCurrentTweenInt("churn") - firstChurn;
+    double boxHeight;
+    double currentLoc = getIntForCurrentVersion("avloc");
+    double currentMethods = getIntForCurrentVersion("methods");
 
-      double boxHeight;
-      if (useLocForBoxHeight) {
-        double currentLocForHeight = getCurrentTweenInt("curr_loc");
-        boxHeight = 1 + (currentLocForHeight / g_maxChurn) * CLASS_MAX_HEIGHT;
-      }
-      else {
-        boxHeight = CLASS_MIN_HEIGHT + (churn / g_maxChurn) * CLASS_MAX_HEIGHT;
-      }
+    if (currentLoc != 0) {
+      boxHeight = 1 + (currentLoc / g_maxLoc) * CLASS_MAX_HEIGHT;
+      
       boxHeight *= heightScale;
-      if (boxHeight < 0) {
-        boxHeight = 0;
-      }
+      if (boxHeight < 0) boxHeight = 0;
       
-      double currentLoc = getCurrentTweenInt("curr_loc");
-      double currentFactor = currentLoc / getMaxLoc();
-      if (currentLoc == 0) {
-        return;
-      }
-      
-      strokeWeight(hasChanged() ? 2.5 : 1);
-      
+      double currentFactor = currentMethods / getSize();
+                    
       picker.start(this.index);
-      fill(hasChanged() ? (isSelected() ? #FF6600 : CLASS_CHANGED_COLOR) : this.currentColor);
-      // box for selected version
-      boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight, CLASS_BASE_RATIO * currentFactor);
+      fill(isSelected() ? #FF6600 : this.currentColor);
+      boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight, 
+                    CLASS_BASE_RATIO * currentFactor);
     }
   }
 }

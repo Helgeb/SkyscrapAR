@@ -11,21 +11,11 @@ class CommitLog {
       version = children.length;
     else if (version < 1)
       version = 1;
-      
-    int index = version - 1;
 
-    return children[index];
+    return children[version - 1];
   }
-  
-  String getMessageForVersion(int version) {
-    return getVersion(version).getString("msg");
-  }
-  
-  String getMessage() {
-    return getMessageForVersion(g_currentVersion);
-  }
-  
-  String getAuthor() {
-    return getVersion(g_currentVersion).getString("author");
+      
+  String getDate() {
+    return getVersion(g_currentVersion).getString("date");
   }
 }

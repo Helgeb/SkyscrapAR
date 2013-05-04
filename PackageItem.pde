@@ -7,41 +7,28 @@ class PackageItem extends ClassItem implements MapModel {
   boolean layoutValid;
     
   public PackageItem(PackageItem parent, XMLElement folder, int level) {
-//    super(parent, folder, level);      
     this.type = "Package";
     this.parent = parent;
     this.level = level;
     this.index = g_treemapItems.size();
     this.name = folder.getString("name");    
     
-    if (parent == null || parent.name == null)
-      this.fullName = this.name;
-    else
-      this.fullName = parent.fullName + "." + this.name;
-
     if (level > maxPackageLevel)
       maxPackageLevel = level;
     
-    println("-->" + this.fullName);
     g_treemapItems.add(this);
 
     XMLElement[] contents = folder.getChildren();
     items = new Mappable[contents.length];
     int count = 0;
-    for (int i = 0; i < contents.length; i++) {
+    for (XMLElement elem: contents) {
       
-      XMLElement elem = contents[i];
       ClassItem newItem = null;
-      if (shouldElementBeIncluded(this.fullName, elem)) { 
-        if (elem.getName().equals("class")) {
-          newItem = new ClassItem(this, elem, level+1);
-        }
-        else {  
-          newItem = new PackageItem(this, elem, level+1);
-        }
+      if (elem.getName().equals("class")) {
+        newItem = new ClassItem(this, elem, level+1);
       }
-      else {
-          println("----------------------------------------------- ignoring " + elem.getString("name"));
+      else {  
+        newItem = new PackageItem(this, elem, level+1);
       }
  
       if (newItem != null) { 
@@ -49,27 +36,8 @@ class PackageItem extends ClassItem implements MapModel {
         size += newItem.getSize();
       }
     }
-    if (count < items.length ) {
-      Mappable[] filteredItems = new Mappable[count];
-      for (int i=0; i<count; i++) {
-        filteredItems[i] = items [i];
-      }
-      items = filteredItems;
-    }
   }
-  
-  boolean shouldElementBeIncluded(String path, XMLElement elem) {
-    if (path==null)
-      return true;
-      
-    for (String excludedElement : excludedElements) {
-      if (fullNameOfNestedElement(this.fullName, elem).equals(excludedElement)) {
-        return false;
-      }
-    }
-    return true;
-  }
-  
+    
   String fullNameOfNestedElement(String path, XMLElement nextElement) {
     return path + "." + nextElement.getString("name");
   }
@@ -96,7 +64,6 @@ class PackageItem extends ClassItem implements MapModel {
   
   void checkLayout() {
     if (!layoutValid) {
-      // good place to write debug code.
       
       if (getItemCount() != 0) {
         algorithm.layout(this, rectRatio(bounds, PACKAGE_BASE_RATIO));
@@ -113,7 +80,6 @@ class PackageItem extends ClassItem implements MapModel {
     checkLayout();
     
     picker.start(this.index);
-    // TODO: draw the package (a quarter)
     Rect bounds = this.getBounds();
     strokeWeight(1);
     stroke(0);
@@ -121,10 +87,11 @@ class PackageItem extends ClassItem implements MapModel {
     fill(red(PACKAGE_MIN_COLOR) * (1 - fracLevel) + red(PACKAGE_MAX_COLOR) * fracLevel,
     green(PACKAGE_MIN_COLOR) * (1 - fracLevel) + green(PACKAGE_MAX_COLOR) * fracLevel,
     blue(PACKAGE_MIN_COLOR) * (1 - fracLevel) + blue(PACKAGE_MAX_COLOR) * fracLevel);
-    boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, PACKAGE_HEIGHT, PACKAGE_BASE_RATIO);
+    boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 
+                  PACKAGE_HEIGHT, PACKAGE_BASE_RATIO);
   
-    for (int i = 0; i < items.length; i++) {
-      items[i].draw();
+    for (Mappable item: items) {
+      item.draw();
     }
   }
 }

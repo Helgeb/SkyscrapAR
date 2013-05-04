@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project name="Example" lastVersion="2">
+  <CodeInfo>
+    <package name="org">
+        <class name="ex1" type="ConcreteClass">
+          <version num="1" avloc="62" methods="5" />
+        </class>
+        <class name="ex2" type="ConcreteClass">
+          <version num="2" avloc="62" methods="5" />
+        </class>
+    </package>
+    <package name="org2">
+        <class name="ex3" type="ConcreteClass">
+          <version num="1" avloc="42" methods="107" />
+          <version num="2" avloc="62" methods="109" />
+        </class>
+    </package>
+  </CodeInfo>
+  <LogInfo>
+    <versionLog num="1" date="Fri Apr 29" />
+    <versionLog num="2" date="Fri Apr 30" />
+  </LogInfo>
+</Project>
+
