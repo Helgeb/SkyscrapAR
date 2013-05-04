@@ -7,6 +7,12 @@ Inspired by [CodeCity](http://www.inf.usi.ch/phd/wettel/codecity.html), by Richa
 
 See also [SkyscrapAR-extractor](https://github.com/rodrigorgs/SkyscrapAR-extractor), needed to create data files for SkyscrapAR.
 
+About this fork
+---------------
+
+My goal is to apply SkyscrapAR to ABAP. I changed the metrics (depends now on loc an number of methods per class). Because I am new to Procesing I did some changes just to improve my understanding of the programm.
+
+
 Demo
 ----
 
