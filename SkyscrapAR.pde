@@ -1,6 +1,9 @@
 String INPUT_FILENAME = "data.xml";
 
+double CONFIDENCE_THRESHOLD = 0.51; // default: 0.51
+boolean PERSISTENT_TREEMAP = false;
 boolean USE_CAM = false;
+boolean SAVE_VIDEO = false;
 int WINDOW_WIDTH = 1000; //640;
 int WINDOW_HEIGHT = 750; //480;
 
@@ -280,6 +283,8 @@ void draw() {
     }
   }
   drawText();
+  if (SAVE_VIDEO) 
+	saveFrame("/output/seq-####.tga"); 
 }
 
 // interaction
@@ -391,5 +396,10 @@ void keyPressed() {
   }
   else if (key == 'p') {
     save("output.png");
+  }
+  else if (key == 'r') {
+    SAVE_VIDEO = !SAVE_VIDEO;
+	if (SAVE_VIDEO)
+		println("Recording aktive");
   }
 } 
