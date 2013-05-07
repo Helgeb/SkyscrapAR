@@ -1,5 +1,6 @@
 String INPUT_FILENAME = "data.xml";
 
+int THRESHOLD = 80; //45; //85; //110;
 double CONFIDENCE_THRESHOLD = 0.51; // default: 0.51
 boolean PERSISTENT_TREEMAP = false;
 boolean USE_CAM = false;
@@ -112,6 +113,7 @@ void setup() {
   textFont(font);
   textMode(SCREEN);
 }
+
 
 //*******************************************************/
 // Drawing
