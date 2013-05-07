@@ -39,7 +39,7 @@ class ClassItem extends SimpleMapItem {
     for (XMLElement version : versions) {
       int num = version.getInt("num") - 1;
       
-      locs[num] = version.getInt("avloc");
+      locs[num] = version.getInt("loc");
       methods[num] = version.getInt("methods");
       
       for (int i = lastNum+1; i < num; i++) {
@@ -110,6 +110,21 @@ class ClassItem extends SimpleMapItem {
   
   int getIntForCurrentVersion(String attr) {
     return getIntForVersion(attr, g_currentVersion);
+  }
+  
+    double getIntBetweenVersions(String attr, double version) {
+    int version1 = floor((float)version);
+    int version2 = ceil((float)version);
+    double alpha = version - version1;
+    
+    int value1 = getIntForVersion(attr, version1);
+    int value2 = getIntForVersion(attr, version2);
+    
+    return (1-alpha)*value1 + alpha*value2;
+  }
+  
+  double getCurrentTweenInt(String attr) {
+    return getIntBetweenVersions(attr, g_tweeningVersion);
   }
   
   void draw() {

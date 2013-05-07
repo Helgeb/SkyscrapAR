@@ -1,24 +1,94 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Project name="Example" lastVersion="2">
-  <CodeInfo>
-    <package name="org">
-        <class name="ex1" type="ConcreteClass">
-          <version num="1" avloc="62" methods="5" />
-        </class>
-        <class name="ex2" type="ConcreteClass">
-          <version num="2" avloc="62" methods="5" />
-        </class>
-    </package>
-    <package name="org2">
-        <class name="ex3" type="ConcreteClass">
-          <version num="1" avloc="42" methods="107" />
-          <version num="2" avloc="62" methods="109" />
-        </class>
-    </package>
-  </CodeInfo>
-  <LogInfo>
-    <versionLog num="1" date="Fri Apr 29" />
-    <versionLog num="2" date="Fri Apr 30" />
-  </LogInfo>
+<?xml version="1.0" encoding="utf-16"?>
+<Project name="Example" lastVersion="1">
+ <CodeInfo>
+  <package name="/EAS/LW_SERVICES">
+   <class name="/EAS/LW_CL_ABMELDUNG_SERVICES" type="CLAS">
+    <version num="1" loc="60" methods="3"/>
+   </class>
+   <class name="/EAS/LW_CL_ABM_SERVICES_MOCK" type="CLAS">
+    <version num="1" loc="9" methods="3"/>
+   </class>
+   <class name="/EAS/LW_CL_ANMELDUNG_SERVICES" type="CLAS">
+    <version num="1" loc="24" methods="2"/>
+   </class>
+   <class name="/EAS/LW_CL_ANM_SERVICES_MOCK" type="CLAS">
+    <version num="1" loc="6" methods="2"/>
+   </class>
+   <class name="/EAS/LW_CL_SE_RUECKABW" type="CLAS">
+    <version num="1" loc="1018" methods="16"/>
+   </class>
+   <class name="/EAS/LW_CL_SE_STORNA" type="CLAS">
+    <version num="1" loc="358" methods="7"/>
+   </class>
+   <class name="/EAS/LW_CL_SE_STORNE" type="CLAS">
+    <version num="1" loc="327" methods="10"/>
+   </class>
+   <class name="/EAS/LW_CL_SE_STORNE_ZC9" type="CLAS">
+    <version num="1" loc="691" methods="12"/>
+   </class>
+   <class name="/EAS/LW_CL_SE_STORNO" type="CLAS">
+    <version num="1" loc="172" methods="4"/>
+   </class>
+   <class name="/EAS/LW_CL_STORNO_SERVICES" type="CLAS">
+    <version num="1" loc="0" methods="0"/>
+   </class>
+  <class name="/EAS/CX_LW_SE" type="CLAS">
+   <version num="1" loc="27" methods="1"/>
+  </class>
+  <class name="/EAS/LW_CL_EASY_SERVICES" type="CLAS">
+   <version num="1" loc="8792" methods="87"/>
+  </class>
+  <class name="/EAS/LW_CL_SE" type="CLAS">
+   <version num="1" loc="2869" methods="48"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_FACTORY" type="CLAS">
+   <version num="1" loc="223" methods="17"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_KD" type="CLAS">
+   <version num="1" loc="0" methods="0"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_KD_LFA_E" type="CLAS">
+   <version num="1" loc="1254" methods="24"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_KD_LFN_A" type="CLAS">
+   <version num="1" loc="1140" methods="23"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LB" type="CLAS">
+   <version num="1" loc="1001" methods="8"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LB_EOGE" type="CLAS">
+   <version num="1" loc="1138" methods="26"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LB_LFA_E" type="CLAS">
+   <version num="1" loc="843" methods="19"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LB_LFN_A" type="CLAS">
+   <version num="1" loc="2777" methods="52"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LB_LFN_S" type="CLAS">
+   <version num="1" loc="265" methods="9"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LB_VNB_A" type="CLAS">
+   <version num="1" loc="862" methods="23"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LB_VNB_E" type="CLAS">
+   <version num="1" loc="3984" methods="48"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LE" type="CLAS">
+   <version num="1" loc="189" methods="3"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LE_LFA_A" type="CLAS">
+   <version num="1" loc="959" methods="21"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LE_VNB_A" type="CLAS">
+   <version num="1" loc="1222" methods="20"/>
+  </class>
+  <class name="/EAS/LW_CL_SE_LE_VNB_E" type="CLAS">
+   <version num="1" loc="1371" methods="23"/>
+  </class>
+  </package>
+ </CodeInfo>
+ <LogInfo>
+  <versionLog num="1" date="20130507"/>
+ </LogInfo>
 </Project>
-

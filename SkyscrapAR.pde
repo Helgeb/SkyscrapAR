@@ -1,5 +1,6 @@
 String INPUT_FILENAME = "data.xml";
 
+boolean USE_CAM = false;
 int WINDOW_WIDTH = 1000; //640;
 int WINDOW_HEIGHT = 750; //480;
 
@@ -26,6 +27,8 @@ double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6;
 
 float MOUSE_SPEED = 50;
 
+double TWEENING_TIME_INTERVAL = 1000; // milliseconds
+
 float zoomFactor = 1.2;
 float xRotation = 0.0;
 float yRotation = 0.0;
@@ -37,6 +40,8 @@ int lastMouseY;
 
 float heightScale = 1.0;
 
+import processing.video.*;
+import jp.nyatla.nyar4psg.*;
 import treemap.*;
 import picking.*;
 import processing.opengl.*;
@@ -47,7 +52,10 @@ PMatrix3D lastMatrix = new PMatrix3D(0.03271547,-0.9987524,0.037727464,
                                      0.040705375,0.99457484,-279.99384,
                                      0.0,0.0,0.0,1.0);
 
+Capture cam;
+MultiMarker nya;
 PFont font=createFont("FFScala", 16);
+NyAR4PsgConfig nyarConf = NyAR4PsgConfig.CONFIG_PSG;
 PImage myframe;
 
 Treemap map;
@@ -57,10 +65,12 @@ LinkedList<ClassItem> g_treemapItems = new LinkedList<ClassItem>();
 int g_nSelectedItems = 0;
 int g_currentVersion = 1;
 int g_firstVersion = 1;
+double g_tweeningVersion = g_currentVersion;
 double g_maxLoc = 0;
 int maxVersion = -1;
 CommitLog commitLog;
 String projectName;
+int previousVisitedVersion = g_firstVersion;
 
 String titleString = "";
 Picker picker;
@@ -84,6 +94,13 @@ void loadTreemap() {
 
 void setup() {
   size(WINDOW_WIDTH, WINDOW_HEIGHT,OPENGL);
+  if (USE_CAM)
+    cam=new Capture(this, WINDOW_WIDTH, WINDOW_HEIGHT);
+  nya=new MultiMarker(this,width,height,"camera_para.dat",nyarConf);
+  nya.addARMarker("patt.top",80);
+  nya.addARMarker("patt.city",80);
+  nya.setThreshold(THRESHOLD);
+  nya.setConfidenceThreshold(CONFIDENCE_THRESHOLD);  
   myframe = new PImage(width, height, RGB);
 
   loadTreemap();
@@ -136,13 +153,36 @@ void drawModel() {
   drawXmlTreemap3D();
 }
 
+//////////////// tweening //////////////////////////
+
+int startTime = 0;
+double startTweeningVersion = g_tweeningVersion;
+
+void tweenVersion() {
+  int time = millis();
+  double progress = (time - startTime) / TWEENING_TIME_INTERVAL;
+  if (progress > 1.0)
+    progress = 1.0;
+    
+  g_tweeningVersion = progress*(g_currentVersion) + (1 - progress)*(startTweeningVersion);
+}
+
 void setCurrentVersion(int v) {
   if (v < 1)
     v = 1;
   else if (v > maxVersion)
     v = maxVersion;
+    
+  if (g_currentVersion != v) {
+    previousVisitedVersion = g_currentVersion;
+    
     g_currentVersion = v;
+    startTime = millis();
+    startTweeningVersion = g_tweeningVersion;
+  }
 }
+
+////////////////////////////////////////////////////
 
 void applyZoom(float s) {
   applyMatrix(
@@ -204,6 +244,7 @@ void drawText() {
 }
 
 void draw() {
+  tweenVersion();
   if (mouseNavigationEnabled) {
     incXRotation(-((lastMouseY - (float)mouseY)/MOUSE_SPEED));    
     lastMouseY = mouseY;
@@ -211,8 +252,33 @@ void draw() {
     lastMouseX = mouseX;
   }
   
-  background(255);
-  drawOnLastMarker();
+ if (!USE_CAM) {
+    background(255);
+    drawOnLastMarker();
+  }
+  else if (cam.available() == true) {
+	cam.read();
+	nya.detect(cam);
+	background(0);
+  
+    nya.drawBackground(cam);
+  
+    if((nya.isExistMarker(0))){
+      lastMatrix = nya.getMarkerMatrix(0);
+      nya.beginTransform(0);
+      drawModel();
+      nya.endTransform();
+    }
+    else if (PERSISTENT_TREEMAP) {
+      drawOnLastMarker();
+    }
+  
+    if((nya.isExistMarker(1))){
+      nya.beginTransform(1);
+      drawModelCube();
+      nya.endTransform();
+    }
+  }
   drawText();
 }
 
