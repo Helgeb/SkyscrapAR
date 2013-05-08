@@ -25,7 +25,7 @@ double PACKAGE_HEIGHT = 2.0;
 double PACKAGE_BASE_RATIO = 0.90;
 double CLASS_BASE_RATIO = 0.70;
 
-double DEFAULT_CLASS_MIN_HEIGHT = 1.0;
+double DEFAULT_CLASS_MIN_HEIGHT = 10.0;
 double CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
 double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6;
 
@@ -321,6 +321,18 @@ void mouseClicked() {
   }  
 }
 
+void updateThreshold(int newThreshold) {
+  if (newThreshold > 255)
+    THRESHOLD = 255;
+  else if (newThreshold < 0)
+    THRESHOLD = 0;
+  else   
+    THRESHOLD = newThreshold;
+  nya.setThreshold(THRESHOLD);
+  
+  println("New THRESHOLD = " + THRESHOLD);
+}
+
 void setZoomFactor(float factor) {
   if (factor < 0.1)
     factor = 0.1;
@@ -383,6 +395,12 @@ void keyPressed() {
     mouseNavigationEnabled = !mouseNavigationEnabled;
     lastMouseX = mouseX;
     lastMouseY = mouseY;
+  }  
+  else if (key == '+') {
+    updateThreshold(THRESHOLD + 5);
+  }
+  else if (key == '-') {
+    updateThreshold(THRESHOLD - 5);
   }  
   else if (key == CODED && keyCode == RIGHT) {
     setCurrentVersion(g_currentVersion + 1);
