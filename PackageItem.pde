@@ -13,6 +13,8 @@ class PackageItem extends ClassItem implements MapModel {
     this.index = g_treemapItems.size();
     this.name = folder.getString("name");   
     
+    g_treemapItems.add(this);
+      
     if (level > maxPackageLevel)
       maxPackageLevel = level;
     
@@ -40,7 +42,6 @@ class PackageItem extends ClassItem implements MapModel {
     }
  
     if (count > 0 && shouldElementBeIncluded() ) {
-      g_treemapItems.add(this);
       items = new Mappable[count];
       for (int i = 0; i < count; i++)
         items[i] = itemsHelp[i];

@@ -2,6 +2,7 @@ String INPUT_FILENAME = "data.xml";
 
 String[] excludedElements = {"/EAS/MK_DACHBODEN"};
 
+
 int THRESHOLD = 80; //45; //85; //110;
 double CONFIDENCE_THRESHOLD = 0.51; // default: 0.51
 boolean PERSISTENT_TREEMAP = false;
