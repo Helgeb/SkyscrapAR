@@ -9,6 +9,7 @@ class ClassItem extends SimpleMapItem {
   int[] locs;
   int firstMethods = 0;
   int firstClassVersion;
+  int maxMethods = 0;
   
   PackageItem parent;
   int level;
@@ -23,10 +24,7 @@ class ClassItem extends SimpleMapItem {
     this.level = level;
     this.index = g_treemapItems.size();
     this.name = elem.getString("name");
-        
-    g_treemapItems.add(this);
-    
-    int maxMethods = 0;
+            
     XMLElement[] versions = elem.getChildren();
     int lastVersion = versions[versions.length-1].getInt("num");
     
@@ -63,6 +61,8 @@ class ClassItem extends SimpleMapItem {
         g_maxLoc = lastLoc;
     }
     
+    if (maxMethods > 0 )
+      g_treemapItems.add(this);
     setSize(maxMethods);
     
     this.currentColor = CLASS_DEFAULT_COLOR;
@@ -71,7 +71,11 @@ class ClassItem extends SimpleMapItem {
   boolean isSelected() {
     return this.currentColor == CLASS_HIGHLIGHT_COLOR;
   }
-
+  
+  int getMethods() {
+    return maxMethods;
+  }
+  
   void toggleSelect() {
     if (this.currentColor == CLASS_DEFAULT_COLOR) {
       this.currentColor = CLASS_HIGHLIGHT_COLOR;

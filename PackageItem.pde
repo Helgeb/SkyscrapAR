@@ -11,36 +11,52 @@ class PackageItem extends ClassItem implements MapModel {
     this.parent = parent;
     this.level = level;
     this.index = g_treemapItems.size();
-    this.name = folder.getString("name");    
+    this.name = folder.getString("name");   
     
     if (level > maxPackageLevel)
       maxPackageLevel = level;
     
-    g_treemapItems.add(this);
-
     XMLElement[] contents = folder.getChildren();
-    items = new Mappable[contents.length];
+    Mappable[] itemsHelp = new Mappable[contents.length];
     int count = 0;
     for (XMLElement elem: contents) {
       
       ClassItem newItem = null;
       if (elem.getName().equals("class")) {
         newItem = new ClassItem(this, elem, level+1);
+        if (newItem.getMethods() == 0)
+           newItem = null;
       }
       else {  
         newItem = new PackageItem(this, elem, level+1);
+        if (((PackageItem)newItem).getItemCount() == 0)
+          newItem = null;
       }
  
       if (newItem != null) { 
-        items[count++] = newItem;
-        size += newItem.getSize();
+          itemsHelp[count++] = newItem;
+          size += newItem.getSize();
       }
     }
+ 
+    if (count > 0 && shouldElementBeIncluded() ) {
+      g_treemapItems.add(this);
+      items = new Mappable[count];
+      for (int i = 0; i < count; i++)
+        items[i] = itemsHelp[i];
+    }
   }
-    
-  String fullNameOfNestedElement(String path, XMLElement nextElement) {
-    return path + "." + nextElement.getString("name");
+  
+  boolean shouldElementBeIncluded() {
+    if (this.name == null)
+      return true;
+    for (String excludedElement : excludedElements) {
+      if (this.name.equals(excludedElement))
+        return false;
+    }
+    return true;
   }
+
   
   /* MapModel interface */
   Mappable[] getItems() {

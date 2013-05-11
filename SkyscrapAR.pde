@@ -1,5 +1,7 @@
 String INPUT_FILENAME = "data.xml";
 
+String[] excludedElements = {"/EAS/MK_DACHBODEN"};
+
 int THRESHOLD = 80; //45; //85; //110;
 double CONFIDENCE_THRESHOLD = 0.51; // default: 0.51
 boolean PERSISTENT_TREEMAP = false;
@@ -20,7 +22,7 @@ color CLASS_HIGHLIGHT_COLOR = #FFFF99;
 color FLOOR_COLOR = #000000;
 color TEXT_COLOR = #000000;
 
-double PACKAGE_HEIGHT = 2.0;
+double PACKAGE_HEIGHT = 1.0;
 
 double PACKAGE_BASE_RATIO = 0.90;
 double CLASS_BASE_RATIO = 0.70;
@@ -99,8 +101,8 @@ void loadTreemap() {
 void setup() {
   size(WINDOW_WIDTH, WINDOW_HEIGHT,OPENGL);
   if (USE_CAM)
-    cam=new Capture(this, WINDOW_WIDTH, WINDOW_HEIGHT);
-  nya=new MultiMarker(this,width,height,"camera_para.dat",nyarConf);
+    cam = new Capture(this, WINDOW_WIDTH, WINDOW_HEIGHT);
+  nya = new MultiMarker(this,width,height,"camera_para.dat",nyarConf);
   nya.addARMarker("patt.top",80);
   nya.addARMarker("patt.city",80);
   nya.setThreshold(THRESHOLD);
