@@ -10,6 +10,7 @@ class ClassItem extends SimpleMapItem {
   int firstMethods = 0;
   int firstClassVersion;
   int maxMethods = 0;
+  int maxLoc = 0;
   
   PackageItem parent;
   int level;
@@ -27,6 +28,8 @@ class ClassItem extends SimpleMapItem {
             
     XMLElement[] versions = elem.getChildren();
     int lastVersion = versions[versions.length-1].getInt("num");
+
+    g_total_objects += 1;
     
     locs = new int[lastVersion];
     methods = new int[lastVersion];
@@ -57,14 +60,20 @@ class ClassItem extends SimpleMapItem {
       if (lastMethods > maxMethods)
         maxMethods = lastMethods;
         
-      if (lastLoc > g_maxLoc)
-        g_maxLoc = lastLoc;
+      if (lastLoc > maxLoc)
+        maxLoc = lastLoc;        
     }
-    
+
+    if (maxLoc > g_maxLoc)
+      g_maxLoc = maxLoc;
+        
     if (maxMethods > 0 )
       g_treemapItems.add(this);
     setSize(maxMethods);
     
+    g_total_loc += maxLoc;
+    g_total_subroutines += maxMethods;    
+
     this.currentColor = getDefaultColor();
   }
 

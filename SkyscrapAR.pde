@@ -85,6 +85,10 @@ int maxVersion = -1;
 CommitLog commitLog;
 String projectName;
 int previousVisitedVersion = g_firstVersion;
+int g_total_loc;
+int g_total_objects;
+int g_total_packages;
+int g_total_subroutines;
 
 String titleString = "";
 Picker picker;
@@ -255,8 +259,20 @@ void drawText() {
   fill(TEXT_COLOR);  
   text(titleString, 10, 32);
   String mode = "scale=" + heightScale;
-  text(mode +  "\nv" + g_currentVersion + " of " + maxVersion + ": " + commitLog.getDate(), 
-               10, height - 30);
+  text(mode + 
+       "\n" + getVersionText() +
+       "\n" + getInfoText(), 10, height - 50);
+}
+
+String getInfoText() {
+  return "Packages: " + NumberFormat.getInstance().format( g_total_packages ) + 
+         " Objects: " + NumberFormat.getInstance().format( g_total_objects ) + 
+         " Subroutines: " + NumberFormat.getInstance().format( g_total_subroutines ) + 
+         " Total LOC: " + NumberFormat.getInstance().format( g_total_loc );
+}
+
+String getVersionText() {
+  return "v" + g_currentVersion + " of " + maxVersion + ": " + commitLog.getDate();
 }
 
 void draw() {

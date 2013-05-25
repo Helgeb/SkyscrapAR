@@ -11,8 +11,9 @@ class PackageItem extends ClassItem implements MapModel {
     this.parent = parent;
     this.level = level;
     this.index = g_treemapItems.size();
-    this.name = folder.getString("name");   
-    
+    this.name = folder.getString("name");  
+
+    g_total_packages += 1;
     g_treemapItems.add(this);
       
     if (level > maxPackageLevel)
