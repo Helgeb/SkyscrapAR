@@ -65,7 +65,7 @@ class ClassItem extends SimpleMapItem {
       g_treemapItems.add(this);
     setSize(maxMethods);
     
-    this.currentColor = CLASS_DEFAULT_COLOR;
+    this.currentColor = getDefaultColor();
   }
 
   boolean isSelected() {
@@ -76,13 +76,17 @@ class ClassItem extends SimpleMapItem {
     return maxMethods;
   }
   
+int getDefaultColor() {
+      return (this.type.equals("CLAS") ? CLASS_DEFAULT_COLOR : CLASS_DEFAULT_COLOR_PROG);
+  }
+  
   void toggleSelect() {
-    if (this.currentColor == CLASS_DEFAULT_COLOR) {
+    if (this.currentColor == getDefaultColor()) {
       this.currentColor = CLASS_HIGHLIGHT_COLOR;
       g_nSelectedItems += 1;
     }
     else {
-      this.currentColor = CLASS_DEFAULT_COLOR;
+      this.currentColor = getDefaultColor();
       g_nSelectedItems -= 1;
     }
   }
@@ -153,7 +157,7 @@ class ClassItem extends SimpleMapItem {
       double currentFactor = currentMethods / getSize();
                     
       picker.start(this.index);
-      fill(isSelected() ? #FF6600 : this.currentColor);
+      fill(this.currentColor);
       boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight, 
                     CLASS_BASE_RATIO * currentFactor);
     }

@@ -1,15 +1,21 @@
 String INPUT_FILENAME = "data.xml";
 
-String[] excludedElements = {"/EAS/MK_DACHBODEN"};
-
-
+String[] excludedElements = {"/EAS/BI_BILLING","/EAS/BW_BUISINESS_WAREHOUSE",
+                             "/EAS/CC_CUSTOMER_CARE", "/EAS/EASY_MG", "/EAS/EASY_PLUS_COMMON",
+                             "/EAS/KK_ACCOUNTING", "/EAS/ME_METERING", "EAS/MK_DACHBODEN",
+                             "/EAS/OM_OUTPUTMANGEMENT", "/EAS/QM_QUALITAETSMANAGEMENT",
+                             "/EAS/SM_SMART_METERING",
+                             "/EAS/ST_STATISTIK", "/EAS/SY_ARCHITEKTUR", "/EAS/XI" };
+                             
+                             
+                             
 int THRESHOLD = 80; //45; //85; //110;
 double CONFIDENCE_THRESHOLD = 0.51; // default: 0.51
 boolean PERSISTENT_TREEMAP = false;
 boolean USE_CAM = false;
 boolean SAVE_VIDEO = false;
-int WINDOW_WIDTH = 1000; //640;
-int WINDOW_HEIGHT = 750; //480;
+int WINDOW_WIDTH = 640; //1600;
+int WINDOW_HEIGHT = 480; //1000;
 
 int TREEMAP_WIDTH = 100;
 int TREEMAP_HEIGHT = TREEMAP_WIDTH;
@@ -18,7 +24,8 @@ color PACKAGE_MIN_COLOR = #000000;
 color PACKAGE_MAX_COLOR = #FFFFFF;
 color CLASS_FLOOR_COLOR = #009900;
 color CLASS_CHANGED_COLOR = #990000;
-color CLASS_DEFAULT_COLOR = #CCCCCC;
+color CLASS_DEFAULT_COLOR = #6666CC;
+color CLASS_DEFAULT_COLOR_PROG = #009999;
 color CLASS_HIGHLIGHT_COLOR = #FFFF99;
 color FLOOR_COLOR = #000000;
 color TEXT_COLOR = #000000;
@@ -101,13 +108,14 @@ void loadTreemap() {
 
 void setup() {
   size(WINDOW_WIDTH, WINDOW_HEIGHT,OPENGL);
-  if (USE_CAM)
+  if (USE_CAM) {
     cam = new Capture(this, WINDOW_WIDTH, WINDOW_HEIGHT);
-  nya = new MultiMarker(this,width,height,"camera_para.dat",nyarConf);
-  nya.addARMarker("patt.top",80);
-  nya.addARMarker("patt.city",80);
-  nya.setThreshold(THRESHOLD);
-  nya.setConfidenceThreshold(CONFIDENCE_THRESHOLD);  
+    nya = new MultiMarker(this,width,height,"camera_para.dat",nyarConf);
+    nya.addARMarker("patt.top",80);
+    nya.addARMarker("patt.city",80);
+    nya.setThreshold(THRESHOLD);
+    nya.setConfidenceThreshold(CONFIDENCE_THRESHOLD);  
+  }
   myframe = new PImage(width, height, RGB);
 
   loadTreemap();
