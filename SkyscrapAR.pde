@@ -1,8 +1,8 @@
 String INPUT_FILENAME = "data.xml";
 
-String[] excludedElements = {"/EAS/BI_BILLING","/EAS/BW_BUISINESS_WAREHOUSE",
+String[] excludedElements = {"/EAS/BI_BILLING","/EAS/BW_BUSINESS_WAREHOUSE",
                              "/EAS/CC_CUSTOMER_CARE", "/EAS/EASY_MG", "/EAS/EASY_PLUS_COMMON",
-                             "/EAS/KK_ACCOUNTING", "/EAS/ME_METERING", "EAS/MK_DACHBODEN",
+                             "/EAS/KK_ACCOUNTING", "/EAS/ME_METERING", "/EAS/MK_DACHBODEN",
                              "/EAS/OM_OUTPUTMANGEMENT", "/EAS/QM_QUALITAETSMANAGEMENT",
                              "/EAS/SM_SMART_METERING",
                              "/EAS/ST_STATISTIK", "/EAS/SY_ARCHITEKTUR", "/EAS/XI" };

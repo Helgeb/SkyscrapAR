@@ -13,39 +13,42 @@ class PackageItem extends ClassItem implements MapModel {
     this.index = g_treemapItems.size();
     this.name = folder.getString("name");  
 
-    g_total_packages += 1;
     g_treemapItems.add(this);
-      
-    if (level > maxPackageLevel)
-      maxPackageLevel = level;
     
-    XMLElement[] contents = folder.getChildren();
-    Mappable[] itemsHelp = new Mappable[contents.length];
-    int count = 0;
-    for (XMLElement elem: contents) {
+    if (shouldElementBeIncluded()) {  
+      if (level > maxPackageLevel)
+        maxPackageLevel = level;
       
-      ClassItem newItem = null;
-      if (elem.getName().equals("class")) {
-        newItem = new ClassItem(this, elem, level+1);
-        if (newItem.getMethods() == 0)
-           newItem = null;
+      g_total_packages += 1;
+        
+      XMLElement[] contents = folder.getChildren();
+      Mappable[] itemsHelp = new Mappable[contents.length];
+      int count = 0;
+      for (XMLElement elem: contents) {
+        
+        ClassItem newItem = null;
+        if (elem.getName().equals("class")) {
+          newItem = new ClassItem(this, elem, level+1);
+          if (newItem.getMethods() == 0)
+             newItem = null;
+        }
+        else {  
+          newItem = new PackageItem(this, elem, level+1);
+          if (((PackageItem)newItem).getItemCount() == 0)
+            newItem = null;
+        }
+   
+        if (newItem != null) { 
+            itemsHelp[count++] = newItem;
+            size += newItem.getSize();
+        }
       }
-      else {  
-        newItem = new PackageItem(this, elem, level+1);
-        if (((PackageItem)newItem).getItemCount() == 0)
-          newItem = null;
+   
+      if (count > 0 ) {
+        items = new Mappable[count];
+        for (int i = 0; i < count; i++)
+          items[i] = itemsHelp[i];
       }
- 
-      if (newItem != null) { 
-          itemsHelp[count++] = newItem;
-          size += newItem.getSize();
-      }
-    }
- 
-    if (count > 0 && shouldElementBeIncluded() ) {
-      items = new Mappable[count];
-      for (int i = 0; i < count; i++)
-        items[i] = itemsHelp[i];
     }
   }
   
