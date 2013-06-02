@@ -9,12 +9,10 @@ class ClassItem extends CityItem {
   int level;
   XMLElement xmlElement;
   
-  ClassItem(PackageItem parent, XMLElement elem, int level) {
+  ClassItem(XMLElement elem, int level) {
     super(elem.getString("name"), elem.getString("type"), level);
-    this.parent = parent;
     this.xmlElement = elem;
     this.level = level;
-    this.index = g_treemapItems.size();
             
     XMLElement[] versions = elem.getChildren();
     int lastVersion = versions[versions.length-1].getInt("num");

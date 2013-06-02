@@ -1,6 +1,4 @@
 class CityItem extends SimpleMapItem {
-  
-  PackageItem parent;
   int index = -1;
   
   CityItemDescription cityItemDescription;
@@ -8,6 +6,7 @@ class CityItem extends SimpleMapItem {
   
   public CityItem(String name, String type, int level) {
       cityItemDescription = new CityItemDescription(name, type, level);
+      this.index = g_treemapItems.size();
   }
   
   public String printTitleString() {

@@ -1,3 +1,5 @@
+static int maxLevel = -1;
+
 public class CityItemDescription {
   private String type;
   private String name;
@@ -7,6 +9,8 @@ public class CityItemDescription {
     this.type = type;
     this.level = level;
     this.name = name;
+    if (level > maxLevel)
+      maxLevel = level;
   }
     
   public String printTitleString() {
@@ -19,5 +23,9 @@ public class CityItemDescription {
   
   public boolean isClass() {
     return type.equals("CLAS");
+  }
+  
+  public float calcFracLevel() {
+    return (float)level / (float)maxLevel;
   }
 }

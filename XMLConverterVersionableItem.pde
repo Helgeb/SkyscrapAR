@@ -1,4 +1,4 @@
-class XMLConverterVersionableItem extends XMLConverter {
+class XMLConverterVersionableItem {// implements XMLConverter {
   
   
 }

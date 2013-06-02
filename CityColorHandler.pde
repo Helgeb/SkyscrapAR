@@ -23,7 +23,7 @@ class CityColorHandler {
   }
   public void fillClass(boolean isSelected, String type) {
      if (isSelected) 
-       (new CityColor(CLASS_FLOOR_COLOR)).fillColor();
+       (new CityColor(CLASS_HIGHLIGHT_COLOR)).fillColor();
      else if (type.equals("class"))
        (new CityColor(CLASS_DEFAULT_COLOR)).fillColor();    
      else  
@@ -31,8 +31,8 @@ class CityColorHandler {
  }
  
  public void fillPackageColor(float fracLevel) {
-     fill(red(PACKAGE_MIN_COLOR) * (1 - fracLevel) + red(PACKAGE_MAX_COLOR) * fracLevel,
-    green(PACKAGE_MIN_COLOR) * (1 - fracLevel) + green(PACKAGE_MAX_COLOR) * fracLevel,
-    blue(PACKAGE_MIN_COLOR) * (1 - fracLevel) + blue(PACKAGE_MAX_COLOR) * fracLevel);
+   fill(red(PACKAGE_MIN_COLOR) * (1 - fracLevel) + red(PACKAGE_MAX_COLOR) * fracLevel,
+        green(PACKAGE_MIN_COLOR) * (1 - fracLevel) + green(PACKAGE_MAX_COLOR) * fracLevel,
+        blue(PACKAGE_MIN_COLOR) * (1 - fracLevel) + blue(PACKAGE_MAX_COLOR) * fracLevel);
  }
 }

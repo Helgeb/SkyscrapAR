@@ -1,7 +1,5 @@
-class XMLConverter {
+interface XMLConverter {
   
-  public CityItem convertItem(PackageItem parent, XMLElement folder, int level) {
-     return null;
-  }
+  public CityItem convertItem(XMLElement folder, int level);
   
 }
