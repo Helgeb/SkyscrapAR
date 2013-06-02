@@ -6,6 +6,6 @@ class CityColor {
    }
    
    public void fillColor() {
-    fill(cityColor);
+      fill(cityColor);
    }
 }

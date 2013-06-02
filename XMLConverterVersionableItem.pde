@@ -1,4 +1,0 @@
-class XMLConverterVersionableItem {// implements XMLConverter {
-  
-  
-}

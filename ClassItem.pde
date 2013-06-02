@@ -5,63 +5,16 @@ class ClassItem extends CityItem {
   int firstClassVersion;
   int maxMethods = 0;
   int maxLoc = 0;
-  
-  int level;
-  XMLElement xmlElement;
-  
-  ClassItem(XMLElement elem, int level) {
-    super(elem.getString("name"), elem.getString("type"), level);
-    this.xmlElement = elem;
-    this.level = level;
-            
-    XMLElement[] versions = elem.getChildren();
-    int lastVersion = versions[versions.length-1].getInt("num");
-
-    g_total_objects += 1;
     
-    locs = new int[lastVersion];
-    methods = new int[lastVersion];
-        
-    int lastNum = -1;
-    int lastLoc = 0;
-    int lastMethods = 0;
-    for (XMLElement version : versions) {
-      int num = version.getInt("num") - 1;
-      
-      locs[num] = version.getInt("loc");
-      methods[num] = version.getInt("methods");
-      
-      for (int i = lastNum+1; i < num; i++) {
-        locs[i] = lastLoc;
-        methods[i] = lastMethods;
-      }
-      
-      lastNum = num;
-      lastLoc = locs[num];
-      lastMethods = methods[num];
-    
-      if (firstMethods == 0) {
-        firstMethods = lastMethods;
-        firstClassVersion = num+1;
-      }
-              
-      if (lastMethods > maxMethods)
-        maxMethods = lastMethods;
-        
-      if (lastLoc > maxLoc)
-        maxLoc = lastLoc;        
-    }
-
-    if (maxLoc > g_maxLoc)
-      g_maxLoc = maxLoc;
-        
-    if (maxMethods > 0 )
-      g_treemapItems.add(this);
+  ClassItem(String name, String type, int level, int[] locs, int[] methods, int maxLoc, int maxMethods, int firstClassVersion) {
+    super(name, type, level);
+    this.locs = locs;
+    this.methods = methods;
+    this.maxMethods = maxMethods;
+    this.maxLoc = maxLoc;
+    this.firstClassVersion = firstClassVersion;
+    g_treemapItems.add(this);
     setSize(maxMethods);
-    
-    g_total_loc += maxLoc;
-    g_total_subroutines += maxMethods;    
-
   }
 
   public String printTitleString() {
@@ -71,7 +24,6 @@ class ClassItem extends CityItem {
   int getMethods() {
     return maxMethods;
   }
-
       
   int getIntForVersion(String attr, int version) {
     version = version - 1;
@@ -115,7 +67,7 @@ class ClassItem extends CityItem {
     strokeWeight(1);
     colorHandler.fillClassFloor();
     // box for largest version
-    boxWithBounds(bounds.x, bounds.y, (level - 1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 0.02, CLASS_BASE_RATIO);
+    boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level - 1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 0.02, CLASS_BASE_RATIO);
     
     double boxHeight;
     double currentLoc = getIntForCurrentVersion("avloc");
@@ -131,7 +83,7 @@ class ClassItem extends CityItem {
                     
       picker.start(this.index);
       colorHandler.fillClass(isSelected, cityItemDescription.type);
-      boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight, 
+      boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight, 
                     CLASS_BASE_RATIO * currentFactor);
     }
   }

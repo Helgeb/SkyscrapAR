@@ -68,13 +68,13 @@ int g_total_objects;
 int g_total_packages;
 int g_total_subroutines;
 
+  XMLConverterFactory converterFactory = new XMLConverterFactory();
 String titleString = "";
 Picker picker;
 
 void loadTreemap() {
   MapLayout algorithm = new PivotBySplitSize();
 
-  XMLConverterFactory converterFactory = new XMLConverterFactory();
   
   XMLElement elem = new XMLElement(this, INPUT_FILENAME);
   XMLElement elemCode = elem.getChild("CodeInfo");
