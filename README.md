@@ -10,31 +10,27 @@ See also [SkyscrapAR-extractor](https://github.com/rodrigorgs/SkyscrapAR-extract
 About this fork
 ---------------
 
-My goal is to apply SkyscrapAR to ABAP. I changed the metrics (depends now on loc an number of methods per class). Because I am new to Procesing I did some changes just to improve my understanding of the programm.
-
-
-Demo
-----
-
-You can see SkyscrapAR in action in the following video: http://www.youtube.com/watch?v=VVRjihr-40U
+This is Skyscaper for ABAP. Soon you'll find an opensource APAB Extractor at SDN.
 
 Dependencies
 ------------
 
 To run SkyscrapAR, you'll need [Processing](http://processing.org/) 1.5.1 (it WON'T work with 2.0 or newer versions), an open source programming language and environment. You'll also need the following Processing plug-ins:
 
-* [NyARToolkit for Processing](http://sourceforge.jp/projects/nyartoolkit/releases/)
 * [Processing Picking Library](http://code.google.com/p/processing-picking-library/)
-* [ttslib](http://www.local-guru.net/blog/pages/ttslib)
 * [Treemap Library](http://benfry.com/writing/treemap/)
 
 For your convenience, the dependencies are available at http://app.dcc.ufba.br/~rodrigo/SkyscrapAR-deps.zip
 
-Windows/Linux users: see http://wiki.processing.org/w/Video_Issues
+Assignment of keys
+------------
 
-Visualize your system
----------------------
-
-SkyscrapAR comes with a XML file with metrics from the JUnit project. If you want to visualize your software project, you will need to extract its metrics using [SkyscrapAR-extractor](https://github.com/rodrigorgs/SkyscrapAR-extractor). 
-
-Your project needs to be in a Git repository. After extracting the metrics, rename the generated `SCMtoXML2.xml` file to `junit.xml` and copy it to the `data/` folder inside SkyscrapAR's root folder (overwrite the existing file).
+* z / Z: zooming
+* s / S: scaling
+* q / Q: (de)activate mouse navigation
+* right / left: change current version
+* p: print (png file)
+* x / X: x-translation
+* y / Y: y-translation
+* c / C: z-translation
+* r: recording (tga files)

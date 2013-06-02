@@ -7,11 +7,8 @@ class XMLConverterPackageItem implements XMLConverter {
       if (shouldElementBeIncluded(name)) {
         XMLElement[] contents = folder.getChildren();
         Vector<Mappable> items = new Vector<Mappable>();
-        int count = 0;
         for (XMLElement elem: contents) {
-          
           XMLConverter converter = converterFactory.getXMLConverter(elem.getName());
-          
           CityItem item = converter.convertItem(elem, level + 1);
           if (item!=null) {
              items.add(item); 

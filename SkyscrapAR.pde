@@ -20,6 +20,7 @@ double CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
 double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6;
 
 float MOUSE_SPEED = 50;
+float TRANS_SPEED = 3;
 
 double TWEENING_TIME_INTERVAL = 1000; // milliseconds
 
@@ -27,6 +28,8 @@ CityColorHandler colorHandler = new CityColorHandler();
 CoordinateHandler coordinateHandler = new CoordinateHandler();
 
 boolean mouseNavigationEnabled = false;
+boolean mouseMovementEnabled = false;
+
 int lastMouseX;
 int lastMouseY;
 
@@ -148,6 +151,7 @@ void drawModel() {
   coordinateHandler.applyXRotation();
   coordinateHandler.applyYRotation();
   coordinateHandler.applyZRotation();
+  coordinateHandler.applyTranslation();
   drawXmlTreemap3D();
 }
 
@@ -216,7 +220,6 @@ void draw() {
     coordinateHandler.incZRotation((lastMouseX - (float)mouseX)/MOUSE_SPEED);
     lastMouseX = mouseX;
   }
-  
     background(255);
     drawOnLastMarker();
     drawText();
@@ -274,6 +277,11 @@ void keyPressed() {
     lastMouseX = mouseX;
     lastMouseY = mouseY;
   }
+  else if (key == 'Q') {
+    mouseMovementEnabled = !mouseMovementEnabled;
+    lastMouseX = mouseX;
+    lastMouseY = mouseY;
+  }
   else if (key == CODED && keyCode == RIGHT) {
     setCurrentVersion(g_currentVersion + 1);
   }
@@ -288,6 +296,24 @@ void keyPressed() {
   }
   else if (key == 'p') {
     save("output.png");
+  }
+  else if (key == 'x') {
+    coordinateHandler.incXPosition(TRANS_SPEED);
+  }
+  else if (key == 'X') {
+    coordinateHandler.incXPosition(-TRANS_SPEED);
+  }
+  else if (key == 'y') {
+    coordinateHandler.incYPosition(TRANS_SPEED);
+  }
+  else if (key == 'Y') {
+    coordinateHandler.incYPosition(-TRANS_SPEED);
+  }
+  else if (key == 'c') {
+    coordinateHandler.incZPosition(TRANS_SPEED);
+  }
+  else if (key == 'C') {
+    coordinateHandler.incZPosition(-TRANS_SPEED);
   }
   else if (key == 'r') {
     SAVE_VIDEO = !SAVE_VIDEO;
