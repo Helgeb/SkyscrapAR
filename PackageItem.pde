@@ -1,23 +1,21 @@
-
 int maxPackageLevel = -1;
 
 class PackageItem extends ClassItem implements MapModel {    
   MapLayout algorithm = new PivotBySplitSize();
   Mappable[] items;
   boolean layoutValid;
+  ObjectDescription packageDescription;
     
   public PackageItem(PackageItem parent, XMLElement folder, int level) {
-    this.type = "Package";
+    packageDescription = new ObjectDescription(folder.getString("name"), "Package", level);
     this.parent = parent;
-    this.level = level;
     this.index = g_treemapItems.size();
-    this.name = folder.getString("name");  
 
     g_treemapItems.add(this);
     
     if (shouldElementBeIncluded()) {  
-      if (level > maxPackageLevel)
-        maxPackageLevel = level;
+      if (packageDescription.level > maxPackageLevel)
+        maxPackageLevel = packageDescription.level;
       
       g_total_packages += 1;
         
@@ -28,12 +26,12 @@ class PackageItem extends ClassItem implements MapModel {
         
         ClassItem newItem = null;
         if (elem.getName().equals("class")) {
-          newItem = new ClassItem(this, elem, level+1);
+          newItem = new ClassItem(this, elem, packageDescription.level+1);
           if (newItem.getMethods() == 0)
              newItem = null;
         }
         else {  
-          newItem = new PackageItem(this, elem, level+1);
+          newItem = new PackageItem(this, elem, packageDescription.level+1);
           if (((PackageItem)newItem).getItemCount() == 0)
             newItem = null;
         }
@@ -53,17 +51,18 @@ class PackageItem extends ClassItem implements MapModel {
   }
   
   boolean shouldElementBeIncluded() {
-    if (this.name == null)
+    if (packageDescription.name == null)
       return true;
     for (String excludedElement : excludedElements) {
-      if (this.name.equals(excludedElement))
+      if (packageDescription.name.equals(excludedElement))
         return false;
     }
     return true;
   }
 
-  
-  /* MapModel interface */
+  public String printTitleString() {
+     return packageDescription.printTitleString();
+  }
   Mappable[] getItems() {
     return items;
   }
@@ -74,9 +73,7 @@ class PackageItem extends ClassItem implements MapModel {
     }
     return items.length;
   }
-  
-  /* Drawing */
-  
+    
   Rect rectRatio(Rect rect, double ratio) {
     double deltaw = rect.w * (1 - ratio)/2;
     double deltah = rect.h * (1 - ratio)/2;
@@ -85,7 +82,6 @@ class PackageItem extends ClassItem implements MapModel {
   
   void checkLayout() {
     if (!layoutValid) {
-      
       if (getItemCount() != 0) {
         algorithm.layout(this, rectRatio(bounds, PACKAGE_BASE_RATIO));
       }
@@ -104,11 +100,11 @@ class PackageItem extends ClassItem implements MapModel {
     Rect bounds = this.getBounds();
     strokeWeight(1);
     stroke(0);
-    float fracLevel = level / (float)maxPackageLevel;
+    float fracLevel = packageDescription.level / (float)maxPackageLevel;
     fill(red(PACKAGE_MIN_COLOR) * (1 - fracLevel) + red(PACKAGE_MAX_COLOR) * fracLevel,
     green(PACKAGE_MIN_COLOR) * (1 - fracLevel) + green(PACKAGE_MAX_COLOR) * fracLevel,
     blue(PACKAGE_MIN_COLOR) * (1 - fracLevel) + blue(PACKAGE_MAX_COLOR) * fracLevel);
-    boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 
+    boxWithBounds(bounds.x, bounds.y, (packageDescription.level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 
                   PACKAGE_HEIGHT, PACKAGE_BASE_RATIO);
   
     for (Mappable item: items) {

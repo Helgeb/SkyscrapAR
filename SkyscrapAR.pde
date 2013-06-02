@@ -1,3 +1,8 @@
+import processing.video.*;
+import treemap.*;
+import picking.*;
+import processing.opengl.*;
+
 String INPUT_FILENAME = "data.xml";
 
 String[] excludedElements = {"/EAS/BI_BILLING","/EAS/BW_BUSINESS_WAREHOUSE",
@@ -54,22 +59,13 @@ int lastMouseY;
 
 float heightScale = 1.0;
 
-import processing.video.*;
-import jp.nyatla.nyar4psg.*;
-import treemap.*;
-import picking.*;
-import processing.opengl.*;
-
 PMatrix3D lastMatrix = new PMatrix3D(0.03271547,-0.9987524,0.037727464,
                                      7.3349524,0.9948697,0.028926386,
                                      -0.09694087,6.203373,0.0957286,
                                      0.040705375,0.99457484,-279.99384,
                                      0.0,0.0,0.0,1.0);
 
-Capture cam;
-MultiMarker nya;
 PFont font=createFont("FFScala", 16);
-NyAR4PsgConfig nyarConf = NyAR4PsgConfig.CONFIG_PSG;
 PImage myframe;
 
 Treemap map;
@@ -112,14 +108,6 @@ void loadTreemap() {
 
 void setup() {
   size(WINDOW_WIDTH, WINDOW_HEIGHT,OPENGL);
-  if (USE_CAM) {
-    cam = new Capture(this, WINDOW_WIDTH, WINDOW_HEIGHT);
-    nya = new MultiMarker(this,width,height,"camera_para.dat",nyarConf);
-    nya.addARMarker("patt.top",80);
-    nya.addARMarker("patt.city",80);
-    nya.setThreshold(THRESHOLD);
-    nya.setConfidenceThreshold(CONFIDENCE_THRESHOLD);  
-  }
   myframe = new PImage(width, height, RGB);
 
   loadTreemap();
@@ -272,7 +260,7 @@ String getInfoText() {
 }
 
 String getVersionText() {
-  return "v" + g_currentVersion + " of " + maxVersion + ": " + commitLog.getDate();
+  return "v" + g_currentVersion + " of " + maxVersion + ": " + commitLog.getDate(g_currentVersion);
 }
 
 void draw() {
@@ -284,33 +272,8 @@ void draw() {
     lastMouseX = mouseX;
   }
   
- if (!USE_CAM) {
     background(255);
     drawOnLastMarker();
-  }
-  else if (cam.available() == true) {
-	cam.read();
-	nya.detect(cam);
-	background(0);
-  
-    nya.drawBackground(cam);
-  
-    if((nya.isExistMarker(0))){
-      lastMatrix = nya.getMarkerMatrix(0);
-      nya.beginTransform(0);
-      drawModel();
-      nya.endTransform();
-    }
-    else if (PERSISTENT_TREEMAP) {
-      drawOnLastMarker();
-    }
-  
-    if((nya.isExistMarker(1))){
-      nya.beginTransform(1);
-      drawModelCube();
-      nya.endTransform();
-    }
-  }
   drawText();
   if (SAVE_VIDEO) 
 	saveFrame("/output/seq-####.tga"); 
@@ -324,7 +287,7 @@ void mouseMoved() {
   int id = picker.get(x, y);
   if (id > -1 && id < g_treemapItems.size()) {
     ClassItem item = g_treemapItems.get(id);
-    titleString = "[" + item.type + "] " + item.name;
+    titleString = item.printTitleString();
     if (!(item instanceof PackageItem))
       titleString += "\nLOC:" + item.getIntForCurrentVersion("avloc") + 
                      " methods: " + item.getIntForCurrentVersion("methods");
@@ -343,21 +306,9 @@ void mouseClicked() {
     ClassItem item = g_treemapItems.get(id);
     if (!(item instanceof PackageItem)) {
       item.toggleSelect();
-      println("" + id + ": " + item.name + " level=" + item.level);
+      println("" + id + ": " + item.entity.classDescription.printNameAndLevel());
     }
   }  
-}
-
-void updateThreshold(int newThreshold) {
-  if (newThreshold > 255)
-    THRESHOLD = 255;
-  else if (newThreshold < 0)
-    THRESHOLD = 0;
-  else   
-    THRESHOLD = newThreshold;
-  nya.setThreshold(THRESHOLD);
-  
-  println("New THRESHOLD = " + THRESHOLD);
 }
 
 void setZoomFactor(float factor) {
@@ -422,12 +373,6 @@ void keyPressed() {
     mouseNavigationEnabled = !mouseNavigationEnabled;
     lastMouseX = mouseX;
     lastMouseY = mouseY;
-  }  
-  else if (key == '+') {
-    updateThreshold(THRESHOLD + 5);
-  }
-  else if (key == '-') {
-    updateThreshold(THRESHOLD - 5);
   }  
   else if (key == CODED && keyCode == RIGHT) {
     setCurrentVersion(g_currentVersion + 1);

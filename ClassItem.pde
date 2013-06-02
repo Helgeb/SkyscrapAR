@@ -1,10 +1,7 @@
-
 class ClassItem extends SimpleMapItem {
   color currentColor;
   int index = -1;
-  String type;
-  String name;
-  
+  ClassEntity entity;
   int[] methods;
   int[] locs;
   int firstMethods = 0;
@@ -19,12 +16,11 @@ class ClassItem extends SimpleMapItem {
   ClassItem() { }
 
   ClassItem(PackageItem parent, XMLElement elem, int level) {
-    this.type = elem.getString("type");
+	entity = new ClassEntity(elem, level);
     this.parent = parent;
     this.xmlElement = elem;
     this.level = level;
     this.index = g_treemapItems.size();
-    this.name = elem.getString("name");
             
     XMLElement[] versions = elem.getChildren();
     int lastVersion = versions[versions.length-1].getInt("num");
@@ -86,7 +82,7 @@ class ClassItem extends SimpleMapItem {
   }
   
 int getDefaultColor() {
-      return (this.type.equals("CLAS") ? CLASS_DEFAULT_COLOR : CLASS_DEFAULT_COLOR_PROG);
+      return (this.entity.classDescription.isClass() ? CLASS_DEFAULT_COLOR : CLASS_DEFAULT_COLOR_PROG);
   }
   
   void toggleSelect() {
@@ -125,6 +121,9 @@ int getDefaultColor() {
       throw new RuntimeException("Error");
   }
   
+  public String printTitleString() {
+     return entity.printTitleString();
+  }
   int getIntForCurrentVersion(String attr) {
     return getIntForVersion(attr, g_currentVersion);
   }

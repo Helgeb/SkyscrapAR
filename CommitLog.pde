@@ -5,17 +5,20 @@ class CommitLog {
     this.elem = elem;
   }
   
-  XMLElement getVersion(int version) {
+  private XMLElement getVersion(int version) {
     XMLElement[] children = this.elem.getChildren();
-    if (version > children.length)
-      version = children.length;
-    else if (version < 1)
-      version = 1;
-
-    return children[version - 1];
+    return children[fitVersionToBound(version, children.length)];
   }
-      
-  String getDate() {
-    return getVersion(g_currentVersion).getString("date");
+
+  private int fitVersionToBound(int version, int childrenLength) {
+    if (version > childrenLength)
+      version = childrenLength;
+    if (version < 1)
+      version = 1;
+    return version - 1;
+  }
+
+  String getDate(int currentVersion) {
+    return getVersion(currentVersion).getString("date");
   }
 }
