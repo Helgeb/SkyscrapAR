@@ -1,5 +1,4 @@
 class ClassEntity {
-  ObjectDescription classDescription;
   
   int[] methods;
   int[] locs;
@@ -11,7 +10,6 @@ class ClassEntity {
   
   ClassEntity(XMLElement elem, int level) {
            
-    classDescription = new ObjectDescription(elem.getString("name"), elem.getString("type"), level);
     XMLElement[] versions = elem.getChildren();
     int lastVersion = versions[versions.length-1].getInt("num");
 
@@ -94,8 +92,5 @@ class ClassEntity {
   
   double getCurrentTweenInt(String attr) {
     return getIntBetweenVersions(attr, g_tweeningVersion);
-  }
-  public String printTitleString() {
-     return classDescription.printTitleString();
   }
 }

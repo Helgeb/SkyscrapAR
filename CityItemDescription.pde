@@ -1,9 +1,9 @@
-class ObjectDescription {
-  String type;
-  String name;
-  int level;
+public class CityItemDescription {
+  private String type;
+  private String name;
+  private int level;
   
-  ObjectDescription(String name, String type, int level) {
+  public CityItemDescription(String name, String type, int level) {
     this.type = type;
     this.level = level;
     this.name = name;

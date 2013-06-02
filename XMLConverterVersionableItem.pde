@@ -1,0 +1,4 @@
+class XMLConverterVersionableItem extends XMLConverter {
+  
+  
+}

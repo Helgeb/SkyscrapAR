@@ -55,9 +55,9 @@ PFont font=createFont("FFScala", 16);
 PImage myframe;
 
 Treemap map;
-PackageItem mapModel;
+PackageItem cityParent;
 int globalIndex = 0;
-LinkedList<ClassItem> g_treemapItems = new LinkedList<ClassItem>();
+LinkedList<CityItem> g_treemapItems = new LinkedList<CityItem>();
 int g_nSelectedItems = 0;
 int g_currentVersion = 1;
 int g_firstVersion = 1;
@@ -83,11 +83,11 @@ void loadTreemap() {
   XMLElement elemLog = elem.getChild("LogInfo");
   projectName = elem.getString("name");
   
-  mapModel = new PackageItem(null, elemCode, 0);
+  cityParent = (PackageItem)(new XMLConverterFactory()).getPackageItemConverter().convertItem(null, elemCode, 0);
   maxVersion = elem.getInt("lastVersion");
   commitLog = new CommitLog(elemLog);
 
-  map = new Treemap(mapModel, 0, 0, width, height);
+  map = new Treemap(cityParent, 0, 0, width, height);
   map.setLayout(algorithm);
   map.updateLayout(-TREEMAP_WIDTH/2, -TREEMAP_HEIGHT/2, TREEMAP_WIDTH, TREEMAP_HEIGHT);
 }
@@ -272,11 +272,8 @@ void mouseMoved() {
       
   int id = picker.get(x, y);
   if (id > -1 && id < g_treemapItems.size()) {
-    ClassItem item = g_treemapItems.get(id);
+    CityItem item = g_treemapItems.get(id);
     titleString = item.printTitleString();
-    if (!(item instanceof PackageItem))
-      titleString += "\nLOC:" + item.getIntForCurrentVersion("avloc") + 
-                     " methods: " + item.getIntForCurrentVersion("methods");
   }
   else {
     titleString = "";
@@ -289,11 +286,8 @@ void mouseClicked() {
     
   int id = picker.get(x, y);
   if (id > -1 && id < g_treemapItems.size()) {
-    ClassItem item = g_treemapItems.get(id);
-    if (!(item instanceof PackageItem)) {
-      item.toggleSelect();
-      println("" + id + ": " + item.entity.classDescription.printNameAndLevel());
-    }
+    CityItem item = g_treemapItems.get(id);
+    item.toggleSelect(id);
   }  
 }
 
@@ -333,9 +327,9 @@ float calculateIncreasedAngle(float actualAngle, float delta) {
   return result;  
 }
 
-Set<ClassItem> getSelectedItems() {
-  Set<ClassItem> selected = new HashSet<ClassItem>();
-  for (ClassItem item : g_treemapItems) {
+Set<CityItem> getSelectedItems() {
+  Set<CityItem> selected = new HashSet<CityItem>();
+  for (CityItem item : g_treemapItems) {
     if (item.isSelected())
       selected.add(item);
   }

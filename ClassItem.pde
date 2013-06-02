@@ -1,22 +1,16 @@
-class ClassItem extends SimpleMapItem {
-  int index = -1;
-  ClassEntity entity;
+class ClassItem extends CityItem {
   int[] methods;
   int[] locs;
   int firstMethods = 0;
   int firstClassVersion;
   int maxMethods = 0;
   int maxLoc = 0;
-  boolean isSelected;
   
-  PackageItem parent;
   int level;
   XMLElement xmlElement;
   
-  ClassItem() { }
-
   ClassItem(PackageItem parent, XMLElement elem, int level) {
-	entity = new ClassEntity(elem, level);
+    super(elem.getString("name"), elem.getString("type"), level);
     this.parent = parent;
     this.xmlElement = elem;
     this.level = level;
@@ -72,30 +66,14 @@ class ClassItem extends SimpleMapItem {
 
   }
 
-  boolean isSelected() {
-    return isSelected;
-  }
+  public String printTitleString() {
+     return super.printTitleString() + "\nLOC:" + getIntForCurrentVersion("avloc") + " methods: " + getIntForCurrentVersion("methods");
+  } 
   
   int getMethods() {
     return maxMethods;
   }
-  
-  void toggleSelect() {
-    if (!isSelected)
-      g_nSelectedItems += 1;
-    else
-      g_nSelectedItems -= 1;
-    isSelected = !isSelected;
-  }
 
-  void boxWithBounds(double x, double y, double z, double w, double h, double zz, double baseRatio) {
-    float a = (float)(x + w/2);
-    float b = (float)(y + h/2);
-    float c = (float)(z + zz/2);
-    translate(a, b, c);
-    box((float)(w*baseRatio), (float)(h*baseRatio), (float)zz);
-    translate(-a, -b, -c);
-  }
       
   int getIntForVersion(String attr, int version) {
     version = version - 1;
@@ -112,10 +90,7 @@ class ClassItem extends SimpleMapItem {
     else
       throw new RuntimeException("Error");
   }
-  
-  public String printTitleString() {
-     return entity.printTitleString();
-  }
+
   int getIntForCurrentVersion(String attr) {
     return getIntForVersion(attr, g_currentVersion);
   }
@@ -157,7 +132,7 @@ class ClassItem extends SimpleMapItem {
       double currentFactor = currentMethods / getSize();
                     
       picker.start(this.index);
-      colorHandler.fillClass(isSelected, entity.classDescription.type);
+      colorHandler.fillClass(isSelected, cityItemDescription.type);
       boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight, 
                     CLASS_BASE_RATIO * currentFactor);
     }

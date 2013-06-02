@@ -1,21 +1,20 @@
 int maxPackageLevel = -1;
 
-class PackageItem extends ClassItem implements MapModel {    
+class PackageItem extends CityItem implements MapModel, VersionableItem {    
   MapLayout algorithm = new PivotBySplitSize();
   Mappable[] items;
   boolean layoutValid;
-  ObjectDescription packageDescription;
     
   public PackageItem(PackageItem parent, XMLElement folder, int level) {
-    packageDescription = new ObjectDescription(folder.getString("name"), "Package", level);
+    super(folder.getString("name"), "Package", level);
     this.parent = parent;
     this.index = g_treemapItems.size();
 
     g_treemapItems.add(this);
     
     if (shouldElementBeIncluded()) {  
-      if (packageDescription.level > maxPackageLevel)
-        maxPackageLevel = packageDescription.level;
+      if (cityItemDescription.level > maxPackageLevel)
+        maxPackageLevel = cityItemDescription.level;
       
       g_total_packages += 1;
         
@@ -24,14 +23,15 @@ class PackageItem extends ClassItem implements MapModel {
       int count = 0;
       for (XMLElement elem: contents) {
         
-        ClassItem newItem = null;
+        CityItem newItem = null;
         if (elem.getName().equals("class")) {
-          newItem = new ClassItem(this, elem, packageDescription.level+1);
-          if (newItem.getMethods() == 0)
-             newItem = null;
+          ClassItem newClassItem = new ClassItem(this, elem, cityItemDescription.level+1);
+          if (newClassItem.getMethods() == 0)
+             newClassItem = null;
+          newItem = newClassItem;
         }
         else {  
-          newItem = new PackageItem(this, elem, packageDescription.level+1);
+          newItem = new PackageItem(this, elem, cityItemDescription.level+1);
           if (((PackageItem)newItem).getItemCount() == 0)
             newItem = null;
         }
@@ -51,18 +51,15 @@ class PackageItem extends ClassItem implements MapModel {
   }
   
   boolean shouldElementBeIncluded() {
-    if (packageDescription.name == null)
+    if (cityItemDescription.name == null)
       return true;
     for (String excludedElement : excludedElements) {
-      if (packageDescription.name.equals(excludedElement))
+      if (cityItemDescription.name.equals(excludedElement))
         return false;
     }
     return true;
   }
 
-  public String printTitleString() {
-     return packageDescription.printTitleString();
-  }
   Mappable[] getItems() {
     return items;
   }
@@ -100,9 +97,9 @@ class PackageItem extends ClassItem implements MapModel {
     Rect bounds = this.getBounds();
     strokeWeight(1);
     stroke(0);
-    float fracLevel = packageDescription.level / (float)maxPackageLevel;
+    float fracLevel = cityItemDescription.level / (float)maxPackageLevel;
     colorHandler.fillPackageColor(fracLevel);
-    boxWithBounds(bounds.x, bounds.y, (packageDescription.level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 
+    boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 
                   PACKAGE_HEIGHT, PACKAGE_BASE_RATIO);
   
     for (Mappable item: items) {
