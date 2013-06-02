@@ -101,9 +101,7 @@ class PackageItem extends ClassItem implements MapModel {
     strokeWeight(1);
     stroke(0);
     float fracLevel = packageDescription.level / (float)maxPackageLevel;
-    fill(red(PACKAGE_MIN_COLOR) * (1 - fracLevel) + red(PACKAGE_MAX_COLOR) * fracLevel,
-    green(PACKAGE_MIN_COLOR) * (1 - fracLevel) + green(PACKAGE_MAX_COLOR) * fracLevel,
-    blue(PACKAGE_MIN_COLOR) * (1 - fracLevel) + blue(PACKAGE_MAX_COLOR) * fracLevel);
+    colorHandler.fillPackageColor(fracLevel);
     boxWithBounds(bounds.x, bounds.y, (packageDescription.level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 
                   PACKAGE_HEIGHT, PACKAGE_BASE_RATIO);
   

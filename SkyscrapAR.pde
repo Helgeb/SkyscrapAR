@@ -12,28 +12,12 @@ String[] excludedElements = {"/EAS/BI_BILLING","/EAS/BW_BUSINESS_WAREHOUSE",
                              "/EAS/SM_SMART_METERING",
                              "/EAS/ST_STATISTIK", "/EAS/SY_ARCHITEKTUR", "/EAS/XI" };
                              
-                             
-                             
-int THRESHOLD = 80; //45; //85; //110;
-double CONFIDENCE_THRESHOLD = 0.51; // default: 0.51
-boolean PERSISTENT_TREEMAP = false;
-boolean USE_CAM = false;
 boolean SAVE_VIDEO = false;
 int WINDOW_WIDTH = 640; //1600;
 int WINDOW_HEIGHT = 480; //1000;
 
 int TREEMAP_WIDTH = 100;
 int TREEMAP_HEIGHT = TREEMAP_WIDTH;
-
-color PACKAGE_MIN_COLOR = #000000;
-color PACKAGE_MAX_COLOR = #FFFFFF;
-color CLASS_FLOOR_COLOR = #009900;
-color CLASS_CHANGED_COLOR = #990000;
-color CLASS_DEFAULT_COLOR = #6666CC;
-color CLASS_DEFAULT_COLOR_PROG = #009999;
-color CLASS_HIGHLIGHT_COLOR = #FFFF99;
-color FLOOR_COLOR = #000000;
-color TEXT_COLOR = #000000;
 
 double PACKAGE_HEIGHT = 1.0;
 
@@ -52,6 +36,8 @@ float zoomFactor = 1.2;
 float xRotation = 0.0;
 float yRotation = 0.0;
 float zRotation = 0.0;
+
+CityColorHandler colorHandler = new CityColorHandler();
 
 boolean mouseNavigationEnabled = false;
 int lastMouseX;
@@ -129,7 +115,7 @@ void drawXmlTreemap3D() {
   
   pushMatrix();
   translate(0, 0, -6.0f);
-  fill(FLOOR_COLOR);
+  colorHandler.fillFloor();
   noStroke();
   strokeWeight(0);
   box((float)TREEMAP_WIDTH, (float)TREEMAP_HEIGHT, 12.0f);
@@ -244,7 +230,7 @@ void drawOnLastMarker() {
 }
 
 void drawText() {
-  fill(TEXT_COLOR);  
+  colorHandler.fillText();  
   text(titleString, 10, 32);
   String mode = "scale=" + heightScale;
   text(mode + 

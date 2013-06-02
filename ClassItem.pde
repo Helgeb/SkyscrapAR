@@ -1,5 +1,4 @@
 class ClassItem extends SimpleMapItem {
-  color currentColor;
   int index = -1;
   ClassEntity entity;
   int[] methods;
@@ -8,6 +7,7 @@ class ClassItem extends SimpleMapItem {
   int firstClassVersion;
   int maxMethods = 0;
   int maxLoc = 0;
+  boolean isSelected;
   
   PackageItem parent;
   int level;
@@ -70,30 +70,22 @@ class ClassItem extends SimpleMapItem {
     g_total_loc += maxLoc;
     g_total_subroutines += maxMethods;    
 
-    this.currentColor = getDefaultColor();
   }
 
   boolean isSelected() {
-    return this.currentColor == CLASS_HIGHLIGHT_COLOR;
+    return isSelected;
   }
   
   int getMethods() {
     return maxMethods;
   }
   
-int getDefaultColor() {
-      return (this.entity.classDescription.isClass() ? CLASS_DEFAULT_COLOR : CLASS_DEFAULT_COLOR_PROG);
-  }
-  
   void toggleSelect() {
-    if (this.currentColor == getDefaultColor()) {
-      this.currentColor = CLASS_HIGHLIGHT_COLOR;
+    if (!isSelected)
       g_nSelectedItems += 1;
-    }
-    else {
-      this.currentColor = getDefaultColor();
+    else
       g_nSelectedItems -= 1;
-    }
+    isSelected = !isSelected;
   }
 
   void boxWithBounds(double x, double y, double z, double w, double h, double zz, double baseRatio) {
@@ -148,7 +140,7 @@ int getDefaultColor() {
     
     stroke(1);
     strokeWeight(1);
-    fill(CLASS_FLOOR_COLOR);
+    colorHandler.fillClassFloor();
     // box for largest version
     boxWithBounds(bounds.x, bounds.y, (level - 1) * PACKAGE_HEIGHT, bounds.w, bounds.h, 0.02, CLASS_BASE_RATIO);
     
@@ -165,7 +157,7 @@ int getDefaultColor() {
       double currentFactor = currentMethods / getSize();
                     
       picker.start(this.index);
-      fill(this.currentColor);
+      colorHandler.fillClass(isSelected, entity.classDescription.type);
       boxWithBounds(bounds.x, bounds.y, (level-1) * PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight, 
                     CLASS_BASE_RATIO * currentFactor);
     }
