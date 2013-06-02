@@ -37,7 +37,7 @@ class XMLConverterClassItem implements XMLConverter {
         maxLoc = lastLoc;        
     }
 
-    if (maxLoc > 0) {  
+    if (maxMethods > 0) {  
       if (maxLoc > g_maxLoc)
         g_maxLoc = maxLoc;
               

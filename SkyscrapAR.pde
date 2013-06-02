@@ -2,19 +2,10 @@ import processing.video.*;
 import treemap.*;
 import picking.*;
 import processing.opengl.*;
+import java.util.Properties;
 
-String INPUT_FILENAME = "data.xml";
-
-String[] excludedElements = {"/EAS/BI_BILLING","/EAS/BW_BUSINESS_WAREHOUSE",
-                             "/EAS/CC_CUSTOMER_CARE", "/EAS/EASY_MG", "/EAS/EASY_PLUS_COMMON",
-                             "/EAS/KK_ACCOUNTING", "/EAS/ME_METERING", "/EAS/MK_DACHBODEN",
-                             "/EAS/OM_OUTPUTMANGEMENT", "/EAS/QM_QUALITAETSMANAGEMENT",
-                             "/EAS/SM_SMART_METERING",
-                             "/EAS/ST_STATISTIK", "/EAS/SY_ARCHITEKTUR", "/EAS/XI" };
-                             
+String[] excludedElements;
 boolean SAVE_VIDEO = false;
-int WINDOW_WIDTH = 640; //1600;
-int WINDOW_HEIGHT = 480; //1000;
 
 int TREEMAP_WIDTH = 100;
 int TREEMAP_HEIGHT = TREEMAP_WIDTH;
@@ -68,15 +59,14 @@ int g_total_objects;
 int g_total_packages;
 int g_total_subroutines;
 
-  XMLConverterFactory converterFactory = new XMLConverterFactory();
+XMLConverterFactory converterFactory = new XMLConverterFactory();
 String titleString = "";
 Picker picker;
 
-void loadTreemap() {
+void loadTreemap(String fileName) {
   MapLayout algorithm = new PivotBySplitSize();
 
-  
-  XMLElement elem = new XMLElement(this, INPUT_FILENAME);
+  XMLElement elem = new XMLElement(this, fileName);
   XMLElement elemCode = elem.getChild("CodeInfo");
   XMLElement elemLog = elem.getChild("LogInfo");
   projectName = elem.getString("name");
@@ -91,18 +81,39 @@ void loadTreemap() {
 }
 
 void setup() {
-  size(WINDOW_WIDTH, WINDOW_HEIGHT,OPENGL);
+  int windowWitdh = 640;
+  int windowHeight = 480;
+  String fileName = "data.xml";
+  String fileNameExcluded = "excludedelements.txt";
+  try {
+    Properties props = new Properties();
+    props.load(openStream("conf.properties"));
+    windowWitdh = int(props.getProperty("env.viewport.width","640"));
+    windowHeight = int(props.getProperty("env.viewport.height","480"));
+    fileName = props.getProperty("env.input.data","data.xml");
+    fileNameExcluded = props.getProperty("env.input.excludedelements","excludedelements.txt");
+  }
+  catch(Exception e) {
+    println("couldn't read config file...");
+  }  
+  size(windowWitdh, windowHeight,OPENGL);
   myframe = new PImage(width, height, RGB);
+  excludedElements = loadStrings(fileNameExcluded);
 
-  loadTreemap();
+  loadTreemap(fileName);
   picker = new Picker(this);
   
   textFont(font);
   textMode(SCREEN);
+ }
+
+void fileSelected(File selection) {
+  if (selection != null)
+    loadTreemap(selection.getName());  
 }
 
 void drawXmlTreemap3D() {
-  picker.start(32767);
+
   lights();
   noStroke();
   

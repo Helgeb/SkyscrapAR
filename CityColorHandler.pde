@@ -24,7 +24,7 @@ class CityColorHandler {
   public void fillClass(boolean isSelected, String type) {
      if (isSelected) 
        (new CityColor(CLASS_HIGHLIGHT_COLOR)).fillColor();
-     else if (type.equals("class"))
+     else if (type.equals("CLAS"))
        (new CityColor(CLASS_DEFAULT_COLOR)).fillColor();    
      else  
        (new CityColor(CLASS_DEFAULT_COLOR_PROG)).fillColor();     
