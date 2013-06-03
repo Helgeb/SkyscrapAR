@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-16"?>
+<Project name="easy" lastVersion="3">
+ <CodeInfo>
+  <package name="dummy">
+   <package name="MK_PROZESSE">
+    <package name="GV_MSB">
+     <package name="GV_MSB_DB">
+      <class name="GV_MSB_CL_TRGG_DB" type="CLAS">
+       <version num="2" loc="71" methods="6"/>
+      </class>
+      <class name="GV_MSB_CL_TRGG_DB_M" type="CLAS">
+       <version num="2" loc="74" methods="6"/>
+      </class>
+      <class name="GV_MSB_CL_TRG_DB" type="CLAS">
+       <version num="2" loc="432" methods="22"/>
+      </class>
+      <class name="GV_MSB_CL_TRG_DB_M" type="CLAS">
+       <version num="2" loc="429" methods="22"/>
+      </class>
+     </package>
+     <package name="GV_MSB_TESTCASE">
+      <class name="GV_MSB_CL_TRG_TC" type="CLAS">
+       <version num="2" loc="88" methods="4"/>
+      </class>
+     </package>
+    </package>
+   </package>
+  </package>
+ </CodeInfo>
+ <LogInfo>
+  <versionLog num="1" date="20130507"/>
+  <versionLog num="2" date="20130508"/>
+  <versionLog num="3" date="20130508"/>
+ </LogInfo>
+</Project>
