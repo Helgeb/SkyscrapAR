@@ -1,5 +1,6 @@
 package cityItems;
 
+import picking.Picker;
 import application.SkyscrapAR;
 import treemap.MapLayout;
 import treemap.MapModel;
@@ -11,11 +12,13 @@ public class PackageItem extends CityItem implements MapModel {
 	MapLayout algorithm = new PivotBySplitSize();
 	Mappable[] items;
 	boolean layoutValid;
+	private Picker picker;
 
-	public PackageItem(String name, int level, Mappable[] items, int itemSize, SkyscrapAR skyscrapAR) {
+	public PackageItem(String name, int level, Mappable[] items, int itemSize, SkyscrapAR skyscrapAR, Picker picker) {
 		super(name, "Package", level, skyscrapAR);
 		this.items = items;
 		size = itemSize;
+		this.picker = picker;
 		skyscrapAR.g_treemapItems.add(this);
 		skyscrapAR.g_total_packages += 1;
 	}
@@ -31,8 +34,7 @@ public class PackageItem extends CityItem implements MapModel {
 	public Rect rectRatio(Rect rect, double ratio) {
 		double deltaw = rect.w * (1 - ratio) / 2;
 		double deltah = rect.h * (1 - ratio) / 2;
-		return new Rect(rect.x + deltaw, rect.y + deltah, rect.w * ratio,
-				rect.h * ratio);
+		return new Rect(rect.x + deltaw, rect.y + deltah, rect.w * ratio, rect.h * ratio);
 	}
 
 	public void checkLayout() {
@@ -46,13 +48,12 @@ public class PackageItem extends CityItem implements MapModel {
 
 	public void draw() {
 		checkLayout();
-		skyscrapAR.picker.start(this.index);
+		picker.start(this.index);
 		Rect bounds = this.getBounds();
 		skyscrapAR.strokeWeight(1);
 		skyscrapAR.stroke(0);
 		skyscrapAR.colorHandler.fillPackageColor(cityItemDescription.calcFracLevel());
-		boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level - 1)
-				* skyscrapAR.PACKAGE_HEIGHT, bounds.w, bounds.h, skyscrapAR.PACKAGE_HEIGHT, skyscrapAR.PACKAGE_BASE_RATIO);
+		boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level - 1) * skyscrapAR.PACKAGE_HEIGHT, bounds.w, bounds.h, skyscrapAR.PACKAGE_HEIGHT, skyscrapAR.PACKAGE_BASE_RATIO);
 		for (Mappable item : items) {
 			item.draw();
 		}

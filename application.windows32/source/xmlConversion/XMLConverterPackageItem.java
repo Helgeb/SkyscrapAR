@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import application.SkyscrapAR;
 
+import picking.Picker;
 import processing.xml.XMLElement;
 import treemap.Mappable;
 import cityItems.CityItem;
@@ -14,11 +15,13 @@ public class XMLConverterPackageItem implements XMLConverter {
 	private XMLConverterFactory converterFactory;
 	private SkyscrapAR skyscrapAR;
 	String[] excludedElements;
+	private Picker picker;
 	
-	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, SkyscrapAR skyscrapAR) {
+	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, SkyscrapAR skyscrapAR, Picker picker) {
 		this.converterFactory = converterFactory;
 		this.excludedElements = excludedElements;
 		this.skyscrapAR = skyscrapAR;
+		this.picker = picker;
 	}
 	
 	public CityItem convertItem(XMLElement folder, int level) {
@@ -38,7 +41,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 			}
 
 			if (itemSize > 0)
-				return new PackageItem(name, level, items.toArray(new Mappable[items.size()]), itemSize, skyscrapAR);
+				return new PackageItem(name, level, items.toArray(new Mappable[items.size()]), itemSize, skyscrapAR, picker);
 		}
 		return null;
 	}

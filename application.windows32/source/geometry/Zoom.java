@@ -2,24 +2,18 @@ package geometry;
 
 import processing.core.PApplet;
 
-public class ZoomFactor {
+public class Zoom {
 	
 	private PApplet applet;
 	private float zoomFactor = 1.75f;
 
-	public ZoomFactor(float zoomFactor, PApplet applet) {
+	public Zoom(float zoomFactor, PApplet applet) {
 		this.zoomFactor = zoomFactor;
 		this.applet = applet;
 	}
 
 	public void applyZoom() {
 		applet.applyMatrix(zoomFactor, 0, 0, 0, 0, zoomFactor, 0, 0, 0, 0, zoomFactor, 0, 0, 0, 0, 1);
-	}
-
-	private void setZoomFactor(float factor) {
-		zoomFactor = factor;
-		adjustFactorToUpperBound();
-		adjustFactorToLowerBound();
 	}
 
 	private void adjustFactorToUpperBound() {
@@ -33,7 +27,9 @@ public class ZoomFactor {
 	}
 
 	public void incZoomFactor(float amount) {
-		setZoomFactor(zoomFactor + amount);
+		zoomFactor += amount;
+		adjustFactorToUpperBound();
+		adjustFactorToLowerBound();
 		PApplet.println("zoom = " + zoomFactor);
 	}
 }

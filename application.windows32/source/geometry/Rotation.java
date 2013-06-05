@@ -1,70 +1,33 @@
 package geometry;
 
 import processing.core.PApplet;
-import processing.core.PConstants;
 
-abstract class Rotation {
+public class Rotation {
+	private SingleRotation xRotation;
+	private SingleRotation yRotation;
+	private SingleRotation zRotation;
 
-	private float rotation = 0.0f;
-	protected PApplet applet;
-	
 	public Rotation(PApplet applet) {
-		this.applet = applet;
-	}
-	
-	public void incRotation(float amount) {
-		rotation = calculateIncreasedAngle(rotation, amount);
+		xRotation = new XRotation(applet);
+		yRotation = new YRotation(applet);
+		zRotation = new ZRotation(applet);
 	}
 
 	public void applyRotation() {
-		float ct = PApplet.cos(rotation);
-		float st = PApplet.sin(rotation);
-		applyRotationMatrix(ct, st);
+		xRotation.applyRotation();
+		yRotation.applyRotation();
+		zRotation.applyRotation();
 	}
 
-	protected abstract void applyRotationMatrix(float ct, float st);
+	public void incXRotation(float amount) {
+		xRotation.incRotation(amount);
+	}
 
-	private float calculateIncreasedAngle(float actualAngle, float delta) {
-		return adjustAngleToLowerBound(adjustAngleToUpperBound(actualAngle + delta));
+	public void incYRotation(float amount) {
+		yRotation.incRotation(amount);
 	}
-	private float adjustAngleToUpperBound(float angle) {
-		if (angle < 0)
-			angle += PConstants.TWO_PI;
-		return angle;
-	}
-	private float adjustAngleToLowerBound(float angle) {
-		if (angle > PConstants.TWO_PI)
-			angle -= PConstants.TWO_PI;
-		return angle;
-	}
-}
 
-class XRotation extends Rotation {
-	public XRotation(PApplet applet) {
-		super(applet);
-	}	
-	public void applyRotationMatrix(float ct, float st) {
-		applet.applyMatrix(ct, 0.0f, st, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -st, 0.0f,
-				ct, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-	}
-}
-
-class YRotation extends Rotation {
-	public YRotation(PApplet applet) {
-		super(applet);
-	}	
-	public void applyRotationMatrix(float ct, float st) {
-		applet.applyMatrix(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, ct, -st, 0.0f, 0.0f, st,
-				ct, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-	}
-}
-
-class ZRotation extends Rotation {
-	public ZRotation(PApplet applet) {
-		super(applet);
-	}	
-	public void applyRotationMatrix(float ct, float st) {
-		applet.applyMatrix(ct, -st, 0.0f, 0.0f, st, ct, 0.0f, 0.0f, 0.0f, 0.0f,
-				1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+	public void incZRotation(float amount) {
+		zRotation.incRotation(amount);
 	}
 }
