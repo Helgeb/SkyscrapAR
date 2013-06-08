@@ -11,8 +11,8 @@ public class CityProperties {
 
 	private int windowWitdh;
 	private int windowHeight;
-	String fileName = "data.xml";
-	String fileNameExcluded = "excludedelements.txt";
+	private String fileName = "data.xml";
+	private String fileNameExcluded = "excludedelements.txt";
 
 
 	public void loadProperties(PApplet applet) {

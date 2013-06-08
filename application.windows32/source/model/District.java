@@ -1,6 +1,7 @@
 package model;
 
 import picking.Picker;
+import application.CityPicker;
 import application.SkyscrapAR;
 import application.draw.color.CityColorHandler;
 import treemap.MapLayout;
@@ -13,10 +14,10 @@ public class District extends CityItem implements MapModel {
 	MapLayout algorithm = new PivotBySplitSize();
 	Mappable[] items;
 	boolean layoutValid;
-	private Picker picker;
+	private CityPicker picker;
 	private CityColorHandler cityColorHandler;
 
-	public District(String name, int level, Mappable[] items, int itemSize, SkyscrapAR skyscrapAR, Picker picker, CityColorHandler cityColorHandler) {
+	public District(String name, int level, Mappable[] items, int itemSize, SkyscrapAR skyscrapAR, CityPicker picker, CityColorHandler cityColorHandler) {
 		super(name, "Package", level, skyscrapAR);
 		this.items = items;
 		size = itemSize;

@@ -1,15 +1,16 @@
 package xmlConversion;
 
 import picking.Picker;
+import application.CityPicker;
 import application.SkyscrapAR;
 
 public class XMLConverterFactory {
 
 	private String[] excludedElements;
 	private SkyscrapAR skyscrapAR;
-	private Picker picker;
+	private CityPicker picker;
 
-	public XMLConverterFactory(SkyscrapAR skyscrapAR, String[] excludedElements, Picker picker) {
+	public XMLConverterFactory(SkyscrapAR skyscrapAR, String[] excludedElements, CityPicker picker) {
 		this.excludedElements = excludedElements;
 		this.skyscrapAR = skyscrapAR;
 		this.picker = picker;

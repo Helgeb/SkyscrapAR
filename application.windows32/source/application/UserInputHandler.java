@@ -1,6 +1,6 @@
 package application;
 
-import application.draw.DrawController;
+import application.draw.CityDrawer;
 import application.draw.geometry.CoordinateHandler;
 import model.Building;
 import model.CityItem;
@@ -20,10 +20,10 @@ public class UserInputHandler {
 	
 	private CoordinateHandler coordinateHandler;
 	private SkyscrapAR skyscrapAR;
-	private Picker picker;
-	private DrawController drawController;
+	private CityPicker picker;
+	private CityDrawer drawController;
 
-	public UserInputHandler(SkyscrapAR skyscrapAR,	CoordinateHandler coordinateHandler, Picker picker, DrawController drawController) {
+	public UserInputHandler(SkyscrapAR skyscrapAR,	CoordinateHandler coordinateHandler, CityPicker picker, CityDrawer drawController) {
 		this.skyscrapAR = skyscrapAR;
 		this.coordinateHandler = coordinateHandler;
 		this.picker = picker;
@@ -70,8 +70,8 @@ public class UserInputHandler {
 			coordinateHandler.incPosition(0,0,TRANS_SPEED);
 		} else if (key == 'C') {
 			coordinateHandler.incPosition(0,0,-TRANS_SPEED);
-		} else if (key == 'r') {
-			drawController.toggleRecording();
+//		} else if (key == 'r') {
+//			drawController.toggleRecording();
 		}
 
 	}
@@ -85,22 +85,11 @@ public class UserInputHandler {
 			lastMouseX = skyscrapAR.mouseX;
 		}
 		drawController.titleString = "";
-		int id = picker.get(x, y);
-		if (id > -1) {
-		if (id > -1 && id < skyscrapAR.g_treemapItems.size()) {
-			CityItem item = skyscrapAR.g_treemapItems.get(id);
-			drawController.titleString = item.printTitleString();
-		}}
+		picker.showTextByMousePosition(x, y);
 	}
 
 	public void mouseClicked(int x, int y) {
-		int id = picker.get(x, y);
-		if (id > -1 && id < skyscrapAR.g_treemapItems.size()) {
-			CityItem item = skyscrapAR.g_treemapItems.get(id);
-			if (item instanceof Building)
-				((Building)item).toggleSelect(id);
-		}
-
+		picker.selectByMousePosition(x, y);
 	}
 
 }

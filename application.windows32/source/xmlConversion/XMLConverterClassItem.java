@@ -6,21 +6,22 @@ import model.ClassVersion;
 import model.ClassVersionCollection;
 import picking.Picker;
 import processing.xml.XMLElement;
+import application.CityPicker;
 import application.SkyscrapAR;
-import application.draw.DrawController;
+import application.draw.CityDrawer;
 import application.draw.color.CityColorHandler;
 
 public class XMLConverterClassItem implements XMLConverter {
 	
 	private SkyscrapAR skyscrapAR;
-	private Picker picker;
+	private CityPicker picker;
 
-	public XMLConverterClassItem(SkyscrapAR skyscrapAR, Picker picker) {
+	public XMLConverterClassItem(SkyscrapAR skyscrapAR, CityPicker picker) {
 		this.skyscrapAR = skyscrapAR;
 		this.picker = picker;
 	}
 	
-	public CityItem convertItem(XMLElement folder, int level, DrawController drawController, CityColorHandler cityColorHandler) {
+	public CityItem convertItem(XMLElement folder, int level, CityDrawer drawController, CityColorHandler cityColorHandler) {
 		XMLElement[] versions = folder.getChildren();
 		ClassVersionCollection classVersionCollection = new ClassVersionCollection();
 		int maxLoc = 0;

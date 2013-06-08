@@ -2,7 +2,7 @@ package application;
 import processing.xml.XMLElement;
 
 public class CommitLog {
-	XMLElement elem;
+	private XMLElement elem;
 
 	public CommitLog(XMLElement elem) {
 		this.elem = elem;

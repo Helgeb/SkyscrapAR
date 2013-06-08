@@ -7,8 +7,9 @@ import model.District;
 import picking.Picker;
 import processing.xml.XMLElement;
 import treemap.Mappable;
+import application.CityPicker;
 import application.SkyscrapAR;
-import application.draw.DrawController;
+import application.draw.CityDrawer;
 import application.draw.color.CityColorHandler;
 
 public class XMLConverterPackageItem implements XMLConverter {
@@ -16,16 +17,16 @@ public class XMLConverterPackageItem implements XMLConverter {
 	private XMLConverterFactory converterFactory;
 	private SkyscrapAR skyscrapAR;
 	String[] excludedElements;
-	private Picker picker;
+	private CityPicker picker;
 	
-	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, SkyscrapAR skyscrapAR, Picker picker) {
+	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, SkyscrapAR skyscrapAR, CityPicker picker) {
 		this.converterFactory = converterFactory;
 		this.excludedElements = excludedElements;
 		this.skyscrapAR = skyscrapAR;
 		this.picker = picker;
 	}
 	
-	public CityItem convertItem(XMLElement folder, int level, DrawController drawController, CityColorHandler cityColorHandler) {
+	public CityItem convertItem(XMLElement folder, int level, CityDrawer drawController, CityColorHandler cityColorHandler) {
 		String name = folder.getString("name");
 		int itemSize = 0;
 

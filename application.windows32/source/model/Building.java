@@ -3,19 +3,20 @@ package model;
 import picking.Picker;
 import processing.core.PApplet;
 import treemap.Rect;
+import application.CityPicker;
 import application.SkyscrapAR;
-import application.draw.DrawController;
+import application.draw.CityDrawer;
 import application.draw.color.CityColorHandler;
 
 public class Building extends CityItem {
 	ClassVersionCollection versions;
-	private Picker picker;
+	private CityPicker picker;
 
 	boolean isSelected;
-	private DrawController drawController;
+	private CityDrawer drawController;
 	private CityColorHandler cityColorHandler;
 	public Building(String name, String type, int level, SkyscrapAR skyscrapAR, 
-			         ClassVersionCollection versions, Picker picker, DrawController drawController, CityColorHandler cityColorHandler) {
+			         ClassVersionCollection versions, CityPicker picker, CityDrawer drawController, CityColorHandler cityColorHandler) {
 		super(name, type, level, skyscrapAR);
 		this.picker = picker;
 		this.drawController = drawController;
