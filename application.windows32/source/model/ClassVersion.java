@@ -1,4 +1,4 @@
-package cityItems;
+package model;
 
 public class ClassVersion {
 

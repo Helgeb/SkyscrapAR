@@ -1,9 +1,11 @@
 package application;
 
-import cityItems.CityItem;
+import application.draw.DrawController;
+import application.draw.geometry.CoordinateHandler;
+import model.Building;
+import model.CityItem;
 import picking.Picker;
 import processing.core.PConstants;
-import geometry.CoordinateHandler;
 
 public class UserInputHandler {
 	
@@ -95,7 +97,8 @@ public class UserInputHandler {
 		int id = picker.get(x, y);
 		if (id > -1 && id < skyscrapAR.g_treemapItems.size()) {
 			CityItem item = skyscrapAR.g_treemapItems.get(id);
-			item.toggleSelect(id);
+			if (item instanceof Building)
+				((Building)item).toggleSelect(id);
 		}
 
 	}

@@ -1,20 +1,18 @@
 package application;
-import processing.core.*;
-import processing.xml.*;
+import java.util.LinkedList;
 
-import treemap.*;
+import model.CityItem;
+import model.District;
+import picking.Picker;
+import processing.core.PApplet;
+import processing.xml.XMLElement;
+import treemap.PivotBySplitSize;
+import treemap.Treemap;
 import xmlConversion.XMLConverterFactory;
-import picking.*;
-import geometry.CoordinateHandler;
-import java.util.Properties;
-import java.io.*;
-import java.text.*;
-import java.util.*;
+import application.draw.DrawController;
+import application.draw.color.CityColorHandler;
+import application.draw.geometry.CoordinateHandler;
 
-import color.CityColorHandler;
-
-import cityItems.CityItem;
-import cityItems.PackageItem;
 
 @SuppressWarnings("serial")
 public class SkyscrapAR extends PApplet {
@@ -31,7 +29,6 @@ public class SkyscrapAR extends PApplet {
 
 	public float heightScale = 1.0f;
 	
-	public int maxLevel = -1;
 	public LinkedList<CityItem> g_treemapItems = new LinkedList<CityItem>();
 	public double g_maxLoc = 0;
 	public int g_total_loc;
@@ -42,11 +39,8 @@ public class SkyscrapAR extends PApplet {
 	public CoordinateHandler coordinateHandler;
 	private UserInputHandler userInputHandler;
 	public DrawController drawController;
-	private int maxVersion;
-
 
 	private XMLConverterFactory converterFactory;
-
 
 	public void setup() {
 		CityProperties cityProperties = new CityProperties();
@@ -61,16 +55,16 @@ public class SkyscrapAR extends PApplet {
 		XMLElement elem = cityProperties.loadXMLCity(this);
 		XMLElement elemCode = elem.getChild("CodeInfo");
 		XMLElement elemLog = elem.getChild("LogInfo");
-		PackageItem cityParent = (PackageItem) converterFactory.getPackageItemConverter().convertItem(elemCode, 0);
-		maxVersion = elem.getInt("lastVersion");
+		colorHandler = new CityColorHandler(this);
+		District cityParent = (District) converterFactory.getPackageItemConverter().convertItem(elemCode, 0, drawController, colorHandler);
+		int maxVersion = elem.getInt("lastVersion");
 		CommitLog commitLog = new CommitLog(elemLog);
 		Treemap map = new Treemap(cityParent, 0, 0, width, height);
 		map.setLayout(new PivotBySplitSize());
 		map.updateLayout(-TREEMAP_WIDTH / 2, -TREEMAP_HEIGHT / 2, TREEMAP_WIDTH, TREEMAP_HEIGHT);
 
-		colorHandler = new CityColorHandler(this);
 		coordinateHandler = new CoordinateHandler(this);
-		drawController = new DrawController(this, colorHandler,TREEMAP_HEIGHT, TREEMAP_WIDTH, maxVersion, commitLog, map);
+		drawController = new DrawController(this, colorHandler,TREEMAP_HEIGHT, TREEMAP_WIDTH, maxVersion, commitLog, map, coordinateHandler);
 		userInputHandler = new UserInputHandler(this, coordinateHandler, picker, drawController);
 		cityProperties.setSize(this);
 		textFont(createFont("FFScala", 16));

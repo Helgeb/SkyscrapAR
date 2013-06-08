@@ -1,4 +1,4 @@
-package color;
+package application.draw.color;
 
 import processing.core.PApplet;
 

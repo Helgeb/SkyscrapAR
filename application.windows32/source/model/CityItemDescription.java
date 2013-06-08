@@ -1,20 +1,18 @@
-package cityItems;
+package model;
 
-import application.SkyscrapAR;
 
 public class CityItemDescription {
 	String type;
 	private String name;
 	int level;
-	private SkyscrapAR skyscrapAR;
+	private static int maxLevel = -1;
 
-	public CityItemDescription(String name, String type, int level, SkyscrapAR skyscrapAR) {
-		this.skyscrapAR = skyscrapAR;
+	public CityItemDescription(String name, String type, int level) {
 		this.type = type;
 		this.level = level;
 		this.name = name;
-		if (level > skyscrapAR.maxLevel)
-			skyscrapAR.maxLevel = level;
+		if (level > maxLevel)
+			maxLevel = level;
 	}
 
 	public String printTitleString() {
@@ -30,6 +28,6 @@ public class CityItemDescription {
 	}
 
 	public float calcFracLevel() {
-		return (float) level / (float) skyscrapAR.maxLevel;
+		return (float) level / (float) maxLevel;
 	}
 }

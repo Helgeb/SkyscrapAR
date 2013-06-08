@@ -1,4 +1,4 @@
-package geometry;
+package application.draw.geometry;
 
 import processing.core.PApplet;
 

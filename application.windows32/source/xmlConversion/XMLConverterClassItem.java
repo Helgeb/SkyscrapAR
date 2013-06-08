@@ -1,12 +1,14 @@
 package xmlConversion;
 
-import application.SkyscrapAR;
-import cityItems.CityItem;
-import cityItems.ClassItem;
-import cityItems.ClassVersion;
-import cityItems.ClassVersionCollection;
+import model.Building;
+import model.CityItem;
+import model.ClassVersion;
+import model.ClassVersionCollection;
 import picking.Picker;
 import processing.xml.XMLElement;
+import application.SkyscrapAR;
+import application.draw.DrawController;
+import application.draw.color.CityColorHandler;
 
 public class XMLConverterClassItem implements XMLConverter {
 	
@@ -18,7 +20,7 @@ public class XMLConverterClassItem implements XMLConverter {
 		this.picker = picker;
 	}
 	
-	public CityItem convertItem(XMLElement folder, int level) {
+	public CityItem convertItem(XMLElement folder, int level, DrawController drawController, CityColorHandler cityColorHandler) {
 		XMLElement[] versions = folder.getChildren();
 		ClassVersionCollection classVersionCollection = new ClassVersionCollection();
 		int maxLoc = 0;
@@ -58,9 +60,9 @@ public class XMLConverterClassItem implements XMLConverter {
 			skyscrapAR.g_total_loc += maxLoc;
 			skyscrapAR.g_total_subroutines += maxMethods;
 			skyscrapAR.g_total_objects += 1;
-			return new ClassItem(folder.getString("name"), 
+			return new Building(folder.getString("name"), 
 					             folder.getString("type"), 
-					             level, skyscrapAR, classVersionCollection, picker);
+					             level, skyscrapAR, classVersionCollection, picker, drawController, cityColorHandler);
 		} else
 			return null;
 	}

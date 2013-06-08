@@ -1,17 +1,25 @@
-package cityItems;
+package model;
 
 import picking.Picker;
-import application.SkyscrapAR;
+import processing.core.PApplet;
 import treemap.Rect;
+import application.SkyscrapAR;
+import application.draw.DrawController;
+import application.draw.color.CityColorHandler;
 
-public class ClassItem extends CityItem {
+public class Building extends CityItem {
 	ClassVersionCollection versions;
 	private Picker picker;
 
-	public ClassItem(String name, String type, int level, SkyscrapAR skyscrapAR, 
-			         ClassVersionCollection versions, Picker picker) {
+	boolean isSelected;
+	private DrawController drawController;
+	private CityColorHandler cityColorHandler;
+	public Building(String name, String type, int level, SkyscrapAR skyscrapAR, 
+			         ClassVersionCollection versions, Picker picker, DrawController drawController, CityColorHandler cityColorHandler) {
 		super(name, type, level, skyscrapAR);
 		this.picker = picker;
+		this.drawController = drawController;
+		this.cityColorHandler = cityColorHandler;
 		skyscrapAR.g_treemapItems.add(this);
 		this.versions = versions;
 		setSize(versions.size());
@@ -26,14 +34,21 @@ public class ClassItem extends CityItem {
 	private double getIntForVersion(String attr, double version) {
 		return versions.getVersionValue(attr, version);
 	}
+	public void toggleSelect(int id) {
+		isSelected = !isSelected;
+		PApplet.println("" + id + ": " + cityItemDescription.printNameAndLevel());
+	}
 
+	public boolean isSelected() {
+		return isSelected;
+	}
 	public void draw() {
-		double version = skyscrapAR.drawController.g_tweeningVersion;
+		double version = drawController.getCurrentVersion();
 		Rect bounds = this.getBounds();
 
 		skyscrapAR.stroke(1);
 		skyscrapAR.strokeWeight(1);
-		skyscrapAR.colorHandler.fillClassFloor();
+		cityColorHandler.fillClassFloor();
 		// box for largest version
 		boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level - 1) * skyscrapAR.PACKAGE_HEIGHT, bounds.w, bounds.h, 0.02f, skyscrapAR.CLASS_BASE_RATIO);
 
@@ -51,7 +66,7 @@ public class ClassItem extends CityItem {
 			double currentFactor = currentMethods / getSize();
 
 			picker.start(this.index);
-			skyscrapAR.colorHandler.fillClass(isSelected, cityItemDescription.type);
+			cityColorHandler.fillClass(isSelected, cityItemDescription.type);
 			boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level - 1) * skyscrapAR.PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight,skyscrapAR.CLASS_BASE_RATIO * currentFactor);
 		}
 	}

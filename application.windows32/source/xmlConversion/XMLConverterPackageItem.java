@@ -2,13 +2,14 @@ package xmlConversion;
 
 import java.util.Vector;
 
-import application.SkyscrapAR;
-
+import model.CityItem;
+import model.District;
 import picking.Picker;
 import processing.xml.XMLElement;
 import treemap.Mappable;
-import cityItems.CityItem;
-import cityItems.PackageItem;
+import application.SkyscrapAR;
+import application.draw.DrawController;
+import application.draw.color.CityColorHandler;
 
 public class XMLConverterPackageItem implements XMLConverter {
 
@@ -24,7 +25,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 		this.picker = picker;
 	}
 	
-	public CityItem convertItem(XMLElement folder, int level) {
+	public CityItem convertItem(XMLElement folder, int level, DrawController drawController, CityColorHandler cityColorHandler) {
 		String name = folder.getString("name");
 		int itemSize = 0;
 
@@ -33,7 +34,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 			Vector<Mappable> items = new Vector<Mappable>();
 			for (XMLElement elem : contents) {
 				XMLConverter converter = converterFactory.getXMLConverter(elem.getName());
-				CityItem item = converter.convertItem(elem, level + 1);
+				CityItem item = converter.convertItem(elem, level + 1, drawController, cityColorHandler);
 				if (item != null) {
 					items.add(item);
 					itemSize += item.getSize();
@@ -41,7 +42,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 			}
 
 			if (itemSize > 0)
-				return new PackageItem(name, level, items.toArray(new Mappable[items.size()]), itemSize, skyscrapAR, picker);
+				return new District(name, level, items.toArray(new Mappable[items.size()]), itemSize, skyscrapAR, picker, cityColorHandler);
 		}
 		return null;
 	}
