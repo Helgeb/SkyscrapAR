@@ -19,8 +19,19 @@ import cityItems.PackageItem;
 @SuppressWarnings("serial")
 public class SkyscrapAR extends PApplet {
 
+	public int TREEMAP_WIDTH = 100;
+	public int TREEMAP_HEIGHT = TREEMAP_WIDTH;
+	public double PACKAGE_HEIGHT = 1.0f;
+	public double PACKAGE_BASE_RATIO = 0.90f;
+	public double CLASS_BASE_RATIO = 0.70f;
+
+	public double DEFAULT_CLASS_MIN_HEIGHT = 10.0f;
+	public double CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
+	public double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6f;
+
+	public float heightScale = 1.0f;
+	
 	public int maxLevel = -1;
-	public String titleString = "";
 	public LinkedList<CityItem> g_treemapItems = new LinkedList<CityItem>();
 	public double g_maxLoc = 0;
 	public int g_total_loc;
@@ -30,25 +41,12 @@ public class SkyscrapAR extends PApplet {
 	public CityColorHandler colorHandler;
 	public CoordinateHandler coordinateHandler;
 	private UserInputHandler userInputHandler;
-	private DrawController drawController;
+	public DrawController drawController;
 	private int maxVersion;
 
-	public Treemap map;
-	CommitLog commitLog;
 
 	private XMLConverterFactory converterFactory;
 
-	public void loadTreemap(CityProperties cityProperties) {
-		XMLElement elem = cityProperties.loadXMLCity(this);
-		XMLElement elemCode = elem.getChild("CodeInfo");
-		XMLElement elemLog = elem.getChild("LogInfo");
-		PackageItem cityParent = (PackageItem) converterFactory.getPackageItemConverter().convertItem(elemCode, 0);
-		maxVersion = elem.getInt("lastVersion");
-		commitLog = new CommitLog(elemLog);
-		map = new Treemap(cityParent, 0, 0, width, height);
-		map.setLayout(new PivotBySplitSize());
-		cityProperties.setMapLayout(map);
-	}
 
 	public void setup() {
 		CityProperties cityProperties = new CityProperties();
@@ -59,13 +57,21 @@ public class SkyscrapAR extends PApplet {
 		
 		Picker picker = new Picker(this);
 		converterFactory = new XMLConverterFactory(this, excludedElements, picker);
+		
+		XMLElement elem = cityProperties.loadXMLCity(this);
+		XMLElement elemCode = elem.getChild("CodeInfo");
+		XMLElement elemLog = elem.getChild("LogInfo");
+		PackageItem cityParent = (PackageItem) converterFactory.getPackageItemConverter().convertItem(elemCode, 0);
+		maxVersion = elem.getInt("lastVersion");
+		CommitLog commitLog = new CommitLog(elemLog);
+		Treemap map = new Treemap(cityParent, 0, 0, width, height);
+		map.setLayout(new PivotBySplitSize());
+		map.updateLayout(-TREEMAP_WIDTH / 2, -TREEMAP_HEIGHT / 2, TREEMAP_WIDTH, TREEMAP_HEIGHT);
+
 		colorHandler = new CityColorHandler(this);
 		coordinateHandler = new CoordinateHandler(this);
-		drawController = new DrawController(this, colorHandler,cityProperties.TREEMAP_HEIGHT, cityProperties.TREEMAP_WIDTH, maxVersion);
+		drawController = new DrawController(this, colorHandler,TREEMAP_HEIGHT, TREEMAP_WIDTH, maxVersion, commitLog, map);
 		userInputHandler = new UserInputHandler(this, coordinateHandler, picker, drawController);
-		
-		loadTreemap(cityProperties);
-		
 		cityProperties.setSize(this);
 		textFont(createFont("FFScala", 16));
 		textMode(SCREEN);

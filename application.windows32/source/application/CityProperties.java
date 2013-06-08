@@ -8,18 +8,7 @@ import treemap.Treemap;
 
 public class CityProperties {
 	
-	public int TREEMAP_WIDTH = 100;
-	public int TREEMAP_HEIGHT = TREEMAP_WIDTH;
-	public double PACKAGE_HEIGHT = 1.0f;
-	public double PACKAGE_BASE_RATIO = 0.90f;
-	public double CLASS_BASE_RATIO = 0.70f;
 
-	public double DEFAULT_CLASS_MIN_HEIGHT = 10.0f;
-	public double CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
-	public double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6f;
-
-	public float heightScale = 1.0f;
-	
 	private int windowWitdh;
 	private int windowHeight;
 	String fileName = "data.xml";
@@ -52,7 +41,5 @@ public class CityProperties {
 		return new XMLElement(applet, fileName);
 	}
 
-	public void setMapLayout(Treemap map) {
-		map.updateLayout(-TREEMAP_WIDTH / 2, -TREEMAP_HEIGHT / 2, TREEMAP_WIDTH, TREEMAP_HEIGHT);
-	}
+
 }

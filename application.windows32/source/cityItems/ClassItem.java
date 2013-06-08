@@ -28,7 +28,7 @@ public class ClassItem extends CityItem {
 	}
 
 	public void draw() {
-		double version = 5;
+		double version = skyscrapAR.drawController.g_tweeningVersion;
 		Rect bounds = this.getBounds();
 
 		skyscrapAR.stroke(1);

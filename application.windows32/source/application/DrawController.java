@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import color.CityColorHandler;
 
 import processing.core.PMatrix3D;
+import treemap.Treemap;
 
 public class DrawController {
 
@@ -21,19 +22,25 @@ public class DrawController {
 	double startTweeningVersion = g_tweeningVersion;
 	public int previousVisitedVersion = g_firstVersion;
 	private int maxVersion = -1;
+	public String titleString = "";
 	
 	private PMatrix3D lastMatrix = new PMatrix3D(0.03271547f, -0.9987524f, 0.037727464f, 7.3349524f, 0.9948697f, 0.028926386f, -0.09694087f,
 												 6.203373f, 0.0957286f, 0.040705375f, 0.99457484f, -279.99384f, 0.0f, 0.0f, 0.0f, 1.0f);
 	private CityColorHandler colorHandler;
 	private int treemapHeight;
 	private int treemapWidth;
+	private CommitLog commitLog;
+	private Treemap map;
 	
-	public DrawController(SkyscrapAR skyscrapAR, CityColorHandler colorHandler, int treemapHeight, int treemapWidth, int maxVersion) {
+	public DrawController(SkyscrapAR skyscrapAR, CityColorHandler colorHandler, int treemapHeight, int treemapWidth, int maxVersion,
+			CommitLog commitLog, Treemap map) {
 		this.skyscrapAR = skyscrapAR;
 		this.colorHandler = colorHandler;
 		this.treemapHeight = treemapHeight;
 		this.treemapWidth = treemapWidth;
 		this.maxVersion = maxVersion;
+		this.commitLog = commitLog;
+		this.map = map;
 	}
 
 	public void draw() {
@@ -56,7 +63,7 @@ public class DrawController {
 		skyscrapAR.box((float) treemapWidth, (float) treemapHeight, 12.0f);
 		skyscrapAR.popMatrix();
 		skyscrapAR.stroke(0x33000000);
-		skyscrapAR.map.draw();
+		map.draw();
 		skyscrapAR.noLights();
 	}
 
@@ -97,13 +104,13 @@ public class DrawController {
 	
 	public void drawText() {
 		skyscrapAR.colorHandler.fillText();
-		skyscrapAR.text(skyscrapAR.titleString, 10, 32);
+		skyscrapAR.text(titleString, 10, 32);
 		String mode = "scale=" + heightScale;
 		skyscrapAR.text(mode + "\n" + getVersionText() + "\n" + getInfoText(), 10,	skyscrapAR.height - 50);
 	}
 	
 	public String getVersionText() {
-		return "v" + g_currentVersion + " of " + maxVersion + ": " + skyscrapAR.commitLog.getDate(g_currentVersion);
+		return "v" + g_currentVersion + " of " + maxVersion + ": " + commitLog.getDate(g_currentVersion);
 	}
 	
 	public void incCurrentVersion(int increment) {

@@ -82,12 +82,13 @@ public class UserInputHandler {
 			lastMouseY = skyscrapAR.mouseY;
 			lastMouseX = skyscrapAR.mouseX;
 		}
-		skyscrapAR.titleString = "";
+		drawController.titleString = "";
 		int id = picker.get(x, y);
+		if (id > -1) {
 		if (id > -1 && id < skyscrapAR.g_treemapItems.size()) {
 			CityItem item = skyscrapAR.g_treemapItems.get(id);
-			skyscrapAR.titleString = item.printTitleString();
-		}
+			drawController.titleString = item.printTitleString();
+		}}
 	}
 
 	public void mouseClicked(int x, int y) {
