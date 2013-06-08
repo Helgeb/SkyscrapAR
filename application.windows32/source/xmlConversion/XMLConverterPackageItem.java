@@ -16,7 +16,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 
 	private XMLConverterFactory converterFactory;
 	private SkyscrapAR skyscrapAR;
-	String[] excludedElements;
+	private String[] excludedElements;
 	private CityPicker picker;
 	
 	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, SkyscrapAR skyscrapAR, CityPicker picker) {

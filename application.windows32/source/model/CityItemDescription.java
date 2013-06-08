@@ -2,9 +2,9 @@ package model;
 
 
 public class CityItemDescription {
-	String type;
+	private String type;
 	private String name;
-	int level;
+	private int level;
 	private static int maxLevel = -1;
 
 	public CityItemDescription(String name, String type, int level) {
@@ -29,5 +29,13 @@ public class CityItemDescription {
 
 	public float calcFracLevel() {
 		return (float) level / (float) maxLevel;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public String getType() {
+		return type;
 	}
 }

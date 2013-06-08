@@ -2,9 +2,6 @@ package application;
 
 import application.draw.CityDrawer;
 import application.draw.geometry.CoordinateHandler;
-import model.Building;
-import model.CityItem;
-import picking.Picker;
 import processing.core.PConstants;
 
 public class UserInputHandler {
@@ -84,7 +81,6 @@ public class UserInputHandler {
 			lastMouseY = skyscrapAR.mouseY;
 			lastMouseX = skyscrapAR.mouseX;
 		}
-		drawController.titleString = "";
 		picker.showTextByMousePosition(x, y);
 	}
 

@@ -18,7 +18,7 @@ public class VersionController {
 		this.applet = applet;
 	}
 	
-	public void tweenVersion() {
+	private void tweenVersion() {
 		int time = applet.millis();
 		double progress = (time - startTime) / TWEENING_TIME_INTERVAL;
 		if (progress > 1.0f)
@@ -44,6 +44,7 @@ public class VersionController {
 	}
 
 	public double getCurrentVersion() {
+		tweenVersion();
 		return tweeningVersion;
 	}	
 }

@@ -3,7 +3,7 @@ package application.draw.color;
 import processing.core.PApplet;
 
 public class CityColor {
-	int cityColor;
+	private int cityColor;
 	private PApplet applet;
 
 	public CityColor(int cityColor, PApplet applet) {

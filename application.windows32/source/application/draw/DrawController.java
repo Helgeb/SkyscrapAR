@@ -1,5 +1,6 @@
 package application.draw;
 
+import application.CityPicker;
 import application.draw.color.CityColorHandler;
 import application.draw.geometry.CoordinateHandler;
 import processing.core.PApplet;
@@ -19,20 +20,24 @@ public class DrawController {
 	private boolean recordingActive = false;
 	private CityColorHandler colorHandler;
 	private CityDrawer cityDrawer;
+	private CityPicker cityPicker;
 
 	
-	public DrawController(Treemap map, PApplet applet, CityColorHandler colorHandler, CoordinateHandler coordinateHandler, CityDrawer cityDrawer) {
+	public DrawController(Treemap map, PApplet applet, CityColorHandler colorHandler, CoordinateHandler coordinateHandler, CityDrawer cityDrawer, CityPicker cityPicker) {
 		this.map = map;
 		this.applet = applet;
 		this.colorHandler = colorHandler;
 		this.coordinateHandler = coordinateHandler;
 		this.cityDrawer = cityDrawer;
+		this.cityPicker = cityPicker;
 	}
 	
 	public void draw() {
 		applet.background(255);
 		drawOnLastMarker();
-		cityDrawer.drawText();
+		colorHandler.fillText();
+		cityDrawer.drawTitleText();
+		cityPicker.drawPickedText();
 		if (recordingActive)
 			applet.saveFrame("/output/seq-####.tga");
 	}

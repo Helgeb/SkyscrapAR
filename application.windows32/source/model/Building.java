@@ -1,6 +1,5 @@
 package model;
 
-import picking.Picker;
 import processing.core.PApplet;
 import treemap.Rect;
 import application.CityPicker;
@@ -11,7 +10,10 @@ import application.draw.color.CityColorHandler;
 public class Building extends CityItem {
 	ClassVersionCollection versions;
 	private CityPicker picker;
+	private double CLASS_BASE_RATIO = 0.70f;
 
+	private double CLASS_MAX_HEIGHT = 120;
+	
 	boolean isSelected;
 	private CityDrawer drawController;
 	private CityColorHandler cityColorHandler;
@@ -51,14 +53,14 @@ public class Building extends CityItem {
 		skyscrapAR.strokeWeight(1);
 		cityColorHandler.fillClassFloor();
 		// box for largest version
-		boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level - 1) * skyscrapAR.PACKAGE_HEIGHT, bounds.w, bounds.h, 0.02f, skyscrapAR.CLASS_BASE_RATIO);
+		boxWithBounds(bounds.x, bounds.y, (cityItemDescription.getLevel() - 1), bounds.w, bounds.h, 0.02f, CLASS_BASE_RATIO);
 
 		double boxHeight;
 		double currentLoc = getIntForVersion("avloc", version);
 		double currentMethods = getIntForVersion("methods", version);
 
 		if (currentLoc != 0) {
-			boxHeight = 1 + (currentLoc / skyscrapAR.g_maxLoc) * skyscrapAR.CLASS_MAX_HEIGHT;
+			boxHeight = 1 + (currentLoc / skyscrapAR.g_maxLoc) * CLASS_MAX_HEIGHT;
 
 			boxHeight *= skyscrapAR.heightScale;
 			if (boxHeight < 0)
@@ -67,8 +69,8 @@ public class Building extends CityItem {
 			double currentFactor = currentMethods / getSize();
 
 			picker.start(this.index);
-			cityColorHandler.fillClass(isSelected, cityItemDescription.type);
-			boxWithBounds(bounds.x, bounds.y, (cityItemDescription.level - 1) * skyscrapAR.PACKAGE_HEIGHT, bounds.w, bounds.h, boxHeight,skyscrapAR.CLASS_BASE_RATIO * currentFactor);
+			cityColorHandler.fillClass(isSelected, cityItemDescription.getType());
+			boxWithBounds(bounds.x, bounds.y, (cityItemDescription.getLevel() - 1), bounds.w, bounds.h, boxHeight,CLASS_BASE_RATIO * currentFactor);
 		}
 	}
 }

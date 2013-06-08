@@ -18,15 +18,8 @@ import application.draw.geometry.CoordinateHandler;
 @SuppressWarnings("serial")
 public class SkyscrapAR extends PApplet {
 
-	public int TREEMAP_WIDTH = 100;
-	public int TREEMAP_HEIGHT = TREEMAP_WIDTH;
-	public double PACKAGE_HEIGHT = 1.0f;
-	public double PACKAGE_BASE_RATIO = 0.90f;
-	public double CLASS_BASE_RATIO = 0.70f;
-
-	public double DEFAULT_CLASS_MIN_HEIGHT = 10.0f;
-	public double CLASS_MIN_HEIGHT = DEFAULT_CLASS_MIN_HEIGHT;
-	public double CLASS_MAX_HEIGHT = (TREEMAP_WIDTH + TREEMAP_HEIGHT) * 0.6f;
+	private int TREEMAP_WIDTH = 100;
+	private int TREEMAP_HEIGHT = TREEMAP_WIDTH;
 
 	public float heightScale = 1.0f;
 	
@@ -56,7 +49,7 @@ public class SkyscrapAR extends PApplet {
 		CityDrawer cityDrawer = new CityDrawer(this, colorHandler, maxVersion, commitLog);
 		String[] excludedElements = cityProperties.loadExcludedElements(this);
 		
-		CityPicker cityPicker = new CityPicker(new Picker(this), this, cityDrawer);
+		CityPicker cityPicker = new CityPicker(new Picker(this), this);
 		converterFactory = new XMLConverterFactory(this, excludedElements, cityPicker);
 		
 		XMLElement elemCode = elem.getChild("CodeInfo");
@@ -69,7 +62,7 @@ public class SkyscrapAR extends PApplet {
 
 		coordinateHandler = new CoordinateHandler(this);
 		
-		drawController = new DrawController(map, this, colorHandler, coordinateHandler, cityDrawer);
+		drawController = new DrawController(map, this, colorHandler, coordinateHandler, cityDrawer, cityPicker);
 		
 		userInputHandler = new UserInputHandler(this, coordinateHandler, cityPicker, cityDrawer);
 		cityProperties.setSize(this);
