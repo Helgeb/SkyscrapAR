@@ -10,9 +10,9 @@ public class CityItem extends SimpleMapItem {
 
 	protected SkyscrapAR skyscrapAR;
 
-	public CityItem(String name, String type, int level, SkyscrapAR skyscrapAR) {
+	public CityItem(String name, String type, int level, SkyscrapAR skyscrapAR, CityItemCollection cityItemCollection) {
 		cityItemDescription = new CityItemDescription(name, type, level);
-		this.index = skyscrapAR.g_treemapItems.size();
+		this.index = cityItemCollection.getNextIndex();
 		this.skyscrapAR = skyscrapAR;
 	}
 

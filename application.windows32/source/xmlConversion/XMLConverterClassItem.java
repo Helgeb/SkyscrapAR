@@ -2,26 +2,22 @@ package xmlConversion;
 
 import model.Building;
 import model.CityItem;
+import model.CityItemCollection;
 import model.ClassVersion;
 import model.ClassVersionCollection;
-import picking.Picker;
 import processing.xml.XMLElement;
-import application.CityPicker;
 import application.SkyscrapAR;
 import application.draw.CityDrawer;
-import application.draw.color.CityColorHandler;
 
 public class XMLConverterClassItem implements XMLConverter {
 	
 	private SkyscrapAR skyscrapAR;
-	private CityPicker picker;
 
-	public XMLConverterClassItem(SkyscrapAR skyscrapAR, CityPicker picker) {
+	public XMLConverterClassItem(SkyscrapAR skyscrapAR) {
 		this.skyscrapAR = skyscrapAR;
-		this.picker = picker;
 	}
 	
-	public CityItem convertItem(XMLElement folder, int level, CityDrawer drawController, CityColorHandler cityColorHandler) {
+	public CityItem convertItem(XMLElement folder, int level, CityDrawer cityDrawer, CityItemCollection cityItemCollection) {
 		XMLElement[] versions = folder.getChildren();
 		ClassVersionCollection classVersionCollection = new ClassVersionCollection();
 		int maxLoc = 0;
@@ -55,15 +51,11 @@ public class XMLConverterClassItem implements XMLConverter {
 		}
 
 		if (maxMethods > 0) {
-			if (maxLoc > skyscrapAR.g_maxLoc)
-				skyscrapAR.g_maxLoc = maxLoc;
+			Building building = new Building(folder.getString("name"), folder.getString("type"), 
+		             level, skyscrapAR, classVersionCollection, cityDrawer, cityItemCollection);
+			cityItemCollection.addBuilding(building, maxLoc, maxMethods);
+			return building;
 
-			skyscrapAR.g_total_loc += maxLoc;
-			skyscrapAR.g_total_subroutines += maxMethods;
-			skyscrapAR.g_total_objects += 1;
-			return new Building(folder.getString("name"), 
-					             folder.getString("type"), 
-					             level, skyscrapAR, classVersionCollection, picker, drawController, cityColorHandler);
 		} else
 			return null;
 	}

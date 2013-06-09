@@ -3,30 +3,27 @@ package xmlConversion;
 import java.util.Vector;
 
 import model.CityItem;
+import model.CityItemCollection;
 import model.District;
-import picking.Picker;
 import processing.xml.XMLElement;
 import treemap.Mappable;
-import application.CityPicker;
 import application.SkyscrapAR;
 import application.draw.CityDrawer;
-import application.draw.color.CityColorHandler;
 
 public class XMLConverterPackageItem implements XMLConverter {
 
 	private XMLConverterFactory converterFactory;
 	private SkyscrapAR skyscrapAR;
 	private String[] excludedElements;
-	private CityPicker picker;
 	
-	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, SkyscrapAR skyscrapAR, CityPicker picker) {
+	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, 
+				SkyscrapAR skyscrapAR) {
 		this.converterFactory = converterFactory;
 		this.excludedElements = excludedElements;
 		this.skyscrapAR = skyscrapAR;
-		this.picker = picker;
 	}
 	
-	public CityItem convertItem(XMLElement folder, int level, CityDrawer drawController, CityColorHandler cityColorHandler) {
+	public CityItem convertItem(XMLElement folder, int level, CityDrawer cityDrawer, CityItemCollection cityItemCollection) {
 		String name = folder.getString("name");
 		int itemSize = 0;
 
@@ -35,7 +32,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 			Vector<Mappable> items = new Vector<Mappable>();
 			for (XMLElement elem : contents) {
 				XMLConverter converter = converterFactory.getXMLConverter(elem.getName());
-				CityItem item = converter.convertItem(elem, level + 1, drawController, cityColorHandler);
+				CityItem item = converter.convertItem(elem, level + 1, cityDrawer, cityItemCollection);
 				if (item != null) {
 					items.add(item);
 					itemSize += item.getSize();
@@ -43,7 +40,8 @@ public class XMLConverterPackageItem implements XMLConverter {
 			}
 
 			if (itemSize > 0)
-				return new District(name, level, items.toArray(new Mappable[items.size()]), itemSize, skyscrapAR, picker, cityColorHandler);
+				return new District(name, level, items.toArray(new Mappable[items.size()]), itemSize, 
+																				skyscrapAR, cityDrawer, cityItemCollection);
 		}
 		return null;
 	}

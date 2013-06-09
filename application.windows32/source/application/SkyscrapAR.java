@@ -1,7 +1,6 @@
 package application;
-import java.util.LinkedList;
 
-import model.CityItem;
+import model.CityItemCollection;
 import model.District;
 import picking.Picker;
 import processing.core.PApplet;
@@ -21,22 +20,14 @@ public class SkyscrapAR extends PApplet {
 	private int TREEMAP_WIDTH = 100;
 	private int TREEMAP_HEIGHT = TREEMAP_WIDTH;
 
-	public float heightScale = 1.0f;
-	
-	public LinkedList<CityItem> g_treemapItems = new LinkedList<CityItem>();
-	public double g_maxLoc = 0;
-	public int g_total_loc;
-	public int g_total_objects;
-	public int g_total_packages;
-	public int g_total_subroutines;
-	public CityColorHandler colorHandler;
-	public CoordinateHandler coordinateHandler;
 	private UserInputHandler userInputHandler;
-	public DrawController drawController;
+	private DrawController drawController;
 
 	private XMLConverterFactory converterFactory;
 
 	public void setup() {
+
+		CityItemCollection itemCollection = new CityItemCollection();
 		CityProperties cityProperties = new CityProperties();
 		cityProperties.loadProperties(this);
 
@@ -45,22 +36,22 @@ public class SkyscrapAR extends PApplet {
 		XMLElement elemLog = elem.getChild("LogInfo");
 		int maxVersion = elem.getInt("lastVersion");
 		CommitLog commitLog = new CommitLog(elemLog);
-		colorHandler = new CityColorHandler(this);
-		CityDrawer cityDrawer = new CityDrawer(this, colorHandler, maxVersion, commitLog);
+		CityColorHandler colorHandler = new CityColorHandler(this);
+		CityPicker cityPicker = new CityPicker(new Picker(this), this, itemCollection);
+		CityDrawer cityDrawer = new CityDrawer(this, colorHandler, maxVersion, commitLog, cityPicker, itemCollection);
 		String[] excludedElements = cityProperties.loadExcludedElements(this);
 		
-		CityPicker cityPicker = new CityPicker(new Picker(this), this);
-		converterFactory = new XMLConverterFactory(this, excludedElements, cityPicker);
+		converterFactory = new XMLConverterFactory(this, excludedElements);
 		
 		XMLElement elemCode = elem.getChild("CodeInfo");
-		District cityParent = (District) converterFactory.getPackageItemConverter().convertItem(elemCode, 0, cityDrawer, colorHandler);
+		District cityParent = (District) converterFactory.getPackageItemConverter().convertItem(elemCode, 0, cityDrawer, itemCollection);
 		
 		
 		Treemap map = new Treemap(cityParent, 0, 0, width, height);
 		map.setLayout(new PivotBySplitSize());
 		map.updateLayout(-TREEMAP_WIDTH / 2, -TREEMAP_HEIGHT / 2, TREEMAP_WIDTH, TREEMAP_HEIGHT);
 
-		coordinateHandler = new CoordinateHandler(this);
+		CoordinateHandler coordinateHandler = new CoordinateHandler(this);
 		
 		drawController = new DrawController(map, this, colorHandler, coordinateHandler, cityDrawer, cityPicker);
 		

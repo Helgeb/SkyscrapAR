@@ -1,30 +1,25 @@
 package model;
 
-import application.CityPicker;
 import application.SkyscrapAR;
-import application.draw.color.CityColorHandler;
+import application.draw.CityDrawer;
 import treemap.MapLayout;
 import treemap.MapModel;
 import treemap.Mappable;
 import treemap.PivotBySplitSize;
-import treemap.Rect;
 
 public class District extends CityItem implements MapModel {
 	private MapLayout algorithm = new PivotBySplitSize();
 	private Mappable[] items;
 	private boolean layoutValid;
-	private CityPicker picker;
-	private CityColorHandler cityColorHandler;
-	private double PACKAGE_BASE_RATIO = 0.90f;
+	private CityDrawer cityDrawer;
 
-	public District(String name, int level, Mappable[] items, int itemSize, SkyscrapAR skyscrapAR, CityPicker picker, CityColorHandler cityColorHandler) {
-		super(name, "Package", level, skyscrapAR);
+	public District(String name, int level, Mappable[] items, int itemSize, SkyscrapAR skyscrapAR, 
+				CityDrawer cityDrawer, CityItemCollection cityItemCollection) {
+		super(name, "Package", level, skyscrapAR, cityItemCollection);
 		this.items = items;
 		size = itemSize;
-		this.picker = picker;
-		this.cityColorHandler = cityColorHandler;
-		skyscrapAR.g_treemapItems.add(this);
-		skyscrapAR.g_total_packages += 1;
+		this.cityDrawer = cityDrawer;
+		cityItemCollection.addDistrict(this);
 	}
 
 	public Mappable[] getItems() {
@@ -35,16 +30,10 @@ public class District extends CityItem implements MapModel {
 		return items.length;
 	}
 
-	public Rect rectRatio(Rect rect, double ratio) {
-		double deltaw = rect.w * (1 - ratio) / 2;
-		double deltah = rect.h * (1 - ratio) / 2;
-		return new Rect(rect.x + deltaw, rect.y + deltah, rect.w * ratio, rect.h * ratio);
-	}
-
 	public void checkLayout() {
 		if (!layoutValid) {
 			if (getItemCount() != 0) {
-				algorithm.layout(this, rectRatio(bounds, PACKAGE_BASE_RATIO));
+				cityDrawer.setUpDistrictLayout(algorithm, this, bounds);
 			}
 			layoutValid = true;
 		}
@@ -52,12 +41,7 @@ public class District extends CityItem implements MapModel {
 
 	public void draw() {
 		checkLayout();
-		picker.start(this.index);
-		Rect bounds = this.getBounds();
-		skyscrapAR.strokeWeight(1);
-		skyscrapAR.stroke(0);
-		cityColorHandler.fillPackageColor(cityItemDescription.calcFracLevel());
-		boxWithBounds(bounds.x, bounds.y, (cityItemDescription.getLevel() - 1), bounds.w, bounds.h, 1.0f, PACKAGE_BASE_RATIO);
+		cityDrawer.drawDistrict(this.index, this.getBounds(), cityItemDescription.getLevel(), cityItemDescription.calcFracLevel());
 		for (Mappable item : items) {
 			item.draw();
 		}
