@@ -11,32 +11,33 @@ public class DrawController {
 
 	private Treemap map;
 	private PApplet applet;
+	private CityColorHandler colorHandler;
+	private CityPicker cityPicker;
+	private CoordinateHandler coordinateHandler;
 	private PMatrix3D lastMatrix = new PMatrix3D(0.03271547f, -0.9987524f, 0.037727464f, 7.3349524f, 0.9948697f, 0.028926386f, -0.09694087f,
 			 6.203373f, 0.0957286f, 0.040705375f, 0.99457484f, -279.99384f, 0.0f, 0.0f, 0.0f, 1.0f);
 
 	private int treemapHeight;
 	private int treemapWidth;
-	private CoordinateHandler coordinateHandler;
 	private boolean recordingActive = false;
-	private CityColorHandler colorHandler;
-	private CityDrawer cityDrawer;
-	private CityPicker cityPicker;
-
+	private TextDrawer textDrawer;
 	
-	public DrawController(Treemap map, PApplet applet, CityColorHandler colorHandler, CoordinateHandler coordinateHandler, CityDrawer cityDrawer, CityPicker cityPicker) {
+	public DrawController(Treemap map, PApplet applet, CityColorHandler colorHandler, 
+			CoordinateHandler coordinateHandler, CityPicker cityPicker,
+			TextDrawer textDrawer) {
 		this.map = map;
 		this.applet = applet;
 		this.colorHandler = colorHandler;
 		this.coordinateHandler = coordinateHandler;
-		this.cityDrawer = cityDrawer;
 		this.cityPicker = cityPicker;
+		this.textDrawer = textDrawer;
 	}
 	
 	public void draw() {
 		applet.background(255);
 		drawOnLastMarker();
 		colorHandler.fillText();
-		cityDrawer.drawTitleText();
+		textDrawer.drawTitleText();
 		cityPicker.drawPickedText();
 		if (recordingActive)
 			applet.saveFrame("/output/seq-####.tga");
@@ -75,5 +76,9 @@ public class DrawController {
 	}
 	public void toggleRecording() {
 		recordingActive = !recordingActive;		
+	}
+
+	public void saveScreenshot(String filename) {
+		applet.save(filename);
 	}
 }

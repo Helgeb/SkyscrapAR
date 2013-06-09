@@ -4,15 +4,13 @@ import application.SkyscrapAR;
 
 public class XMLConverterFactory {
 
-	private String[] excludedElements;
 	private SkyscrapAR skyscrapAR;
 
-	public XMLConverterFactory(SkyscrapAR skyscrapAR, String[] excludedElements) {
-		this.excludedElements = excludedElements;
+	public XMLConverterFactory(SkyscrapAR skyscrapAR) {
 		this.skyscrapAR = skyscrapAR;
 	}
 	
-	public XMLConverter getPackageItemConverter() {
+	public XMLConverter getPackageItemConverter(String[] excludedElements) {
 		return new XMLConverterPackageItem(this, excludedElements, skyscrapAR);
 	}
 	
@@ -20,10 +18,10 @@ public class XMLConverterFactory {
 		return new XMLConverterClassItem(skyscrapAR);
 	}
 	
-	public XMLConverter getXMLConverter(String name) {
+	public XMLConverter getXMLConverter(String name, String[] excludedElements) {
 		if (name.equals("class"))
 			return getClassItemConverter();
 		else
-			return getPackageItemConverter();
+			return getPackageItemConverter(excludedElements);
 	}
 }

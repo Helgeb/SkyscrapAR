@@ -1,6 +1,7 @@
 package application;
 
 import application.draw.CityDrawer;
+import application.draw.DrawController;
 import application.draw.geometry.CoordinateHandler;
 import processing.core.PConstants;
 
@@ -16,18 +17,21 @@ public class UserInputHandler {
 	private int lastMouseY;
 	
 	private CoordinateHandler coordinateHandler;
-	private SkyscrapAR skyscrapAR;
 	private CityPicker picker;
 	private CityDrawer cityDrawer;
+	private DrawController drawController;
+	private VersionController versionController;
 
-	public UserInputHandler(SkyscrapAR skyscrapAR,	CoordinateHandler coordinateHandler, CityPicker picker, CityDrawer cityDrawer) {
-		this.skyscrapAR = skyscrapAR;
+	public UserInputHandler(DrawController drawController, CoordinateHandler coordinateHandler, 
+						CityPicker picker, CityDrawer cityDrawer, VersionController versionController) {
+		this.drawController = drawController;
 		this.coordinateHandler = coordinateHandler;
 		this.picker = picker;
 		this.cityDrawer = cityDrawer;
+		this.versionController = versionController;
 	}
 
-	public void keyPressed(char key, int keyCode) {
+	public void keyPressed(char key, int keyCode, int mouseX, int mouseY) {
 
 		if (key == 'z') {
 			coordinateHandler.incZoomFactor(0.1f);
@@ -39,22 +43,22 @@ public class UserInputHandler {
 			cityDrawer.incHeightScale(0.1f);
 		} else if (key == 'q') {
 			mouseNavigationEnabled = !mouseNavigationEnabled;
-			lastMouseX = skyscrapAR.mouseX;
-			lastMouseY = skyscrapAR.mouseY;
+			lastMouseX = mouseX;
+			lastMouseY = mouseY;
 		} else if (key == 'Q') {
 			mouseMovementEnabled = !mouseMovementEnabled;
-			lastMouseX = skyscrapAR.mouseX;
-			lastMouseY = skyscrapAR.mouseY;
+			lastMouseX = mouseX;
+			lastMouseY = mouseY;
 		} else if (key == PConstants.CODED && keyCode == PConstants.RIGHT) {
-			cityDrawer.incCurrentVersion(1);
+			versionController.incCurrentVersion(1);
 		} else if (key == PConstants.CODED && keyCode == PConstants.LEFT) {
-			cityDrawer.incCurrentVersion(- 1);
+			versionController.incCurrentVersion(-1);
 		} else if (key == PConstants.CODED && keyCode == PConstants.DOWN) {
-			cityDrawer.incCurrentVersion(- 10);
+			versionController.incCurrentVersion(-10);
 		} else if (key == PConstants.CODED && keyCode == PConstants.UP) {
-			cityDrawer.incCurrentVersion(+ 10);
+			versionController.incCurrentVersion(10);
 		} else if (key == 'p') {
-			skyscrapAR.save("output.png");
+			drawController.saveScreenshot("output.png");
 		} else if (key == 'x') {
 			coordinateHandler.incPosition(TRANS_SPEED,0,0);
 		} else if (key == 'X') {
@@ -67,25 +71,23 @@ public class UserInputHandler {
 			coordinateHandler.incPosition(0,0,TRANS_SPEED);
 		} else if (key == 'C') {
 			coordinateHandler.incPosition(0,0,-TRANS_SPEED);
-//		} else if (key == 'r') {
-//			drawController.toggleRecording();
+		} else if (key == 'r') {
+			drawController.toggleRecording();
 		}
-
 	}
 
-	public void mouseMoved(int x, int y) {
-
+	public void mouseMoved(int mouseX, int mouseY) {
 		if (mouseNavigationEnabled) {
-			coordinateHandler.incRotation(-((lastMouseY - (float) skyscrapAR.mouseY) / MOUSE_SPEED),0,
-										   ((lastMouseX - (float) skyscrapAR.mouseX) / MOUSE_SPEED));
-			lastMouseY = skyscrapAR.mouseY;
-			lastMouseX = skyscrapAR.mouseX;
+			coordinateHandler.incRotation(-((lastMouseY - (float) mouseY) / MOUSE_SPEED),0,
+										   ((lastMouseX - (float) mouseX) / MOUSE_SPEED));
+			lastMouseY = mouseY;
+			lastMouseX = mouseX;
 		}
-		picker.showTextByMousePosition(x, y);
+		picker.showTextByMousePosition(mouseX, mouseY);
 	}
 
-	public void mouseClicked(int x, int y) {
-		picker.selectByMousePosition(x, y);
+	public void mouseClicked(int mouseX, int mouseY) {
+		picker.selectByMousePosition(mouseX, mouseY);
 	}
 
 }

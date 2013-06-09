@@ -31,7 +31,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 			XMLElement[] contents = folder.getChildren();
 			Vector<Mappable> items = new Vector<Mappable>();
 			for (XMLElement elem : contents) {
-				XMLConverter converter = converterFactory.getXMLConverter(elem.getName());
+				XMLConverter converter = converterFactory.getXMLConverter(elem.getName(), excludedElements);
 				CityItem item = converter.convertItem(elem, level + 1, cityDrawer, cityItemCollection);
 				if (item != null) {
 					items.add(item);
