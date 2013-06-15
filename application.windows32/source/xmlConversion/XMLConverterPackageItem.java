@@ -2,25 +2,19 @@ package xmlConversion;
 
 import java.util.Vector;
 
-import model.CityItem;
-import model.CityItemCollection;
-import model.District;
+import model.*;
 import processing.xml.XMLElement;
 import treemap.Mappable;
-import application.SkyscrapAR;
 import application.draw.CityDrawer;
 
 public class XMLConverterPackageItem implements XMLConverter {
 
 	private XMLConverterFactory converterFactory;
-	private SkyscrapAR skyscrapAR;
 	private String[] excludedElements;
 	
-	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements, 
-				SkyscrapAR skyscrapAR) {
+	public XMLConverterPackageItem(XMLConverterFactory converterFactory, String[] excludedElements) {
 		this.converterFactory = converterFactory;
 		this.excludedElements = excludedElements;
-		this.skyscrapAR = skyscrapAR;
 	}
 	
 	public CityItem convertItem(XMLElement folder, int level, CityDrawer cityDrawer, CityItemCollection cityItemCollection) {
@@ -29,7 +23,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 
 		if (shouldElementBeIncluded(name)) {
 			XMLElement[] contents = folder.getChildren();
-			Vector<Mappable> items = new Vector<Mappable>();
+			Vector<CityItem> items = new Vector<CityItem>();
 			for (XMLElement elem : contents) {
 				XMLConverter converter = converterFactory.getXMLConverter(elem.getName(), excludedElements);
 				CityItem item = converter.convertItem(elem, level + 1, cityDrawer, cityItemCollection);
@@ -40,8 +34,7 @@ public class XMLConverterPackageItem implements XMLConverter {
 			}
 
 			if (itemSize > 0)
-				return new District(name, level, items.toArray(new Mappable[items.size()]), itemSize, 
-																				skyscrapAR, cityDrawer, cityItemCollection);
+				return new District(name, level, items.toArray(new Mappable[items.size()]), itemSize, cityDrawer, cityItemCollection);
 		}
 		return null;
 	}

@@ -3,16 +3,14 @@ package application;
 import model.*;
 import picking.Picker;
 import processing.xml.XMLElement;
-import treemap.*;
 import xmlConversion.XMLConverterFactory;
 import application.draw.*;
 import application.draw.color.CityColorHandler;
 import application.draw.geometry.CoordinateHandler;
+import application.userinput.*;
 
 public class Setup {
 
-	private int TREEMAP_WIDTH = 100;
-	private int TREEMAP_HEIGHT = TREEMAP_WIDTH;
 	private UserInputHandler userInputHandler;
 	private DrawController drawController;
 
@@ -36,16 +34,14 @@ public class Setup {
 		VersionController versionController = new VersionController(skyscrapAR, maxVersion);
 		CityDrawer cityDrawer = new CityDrawer(skyscrapAR, colorHandler,cityPicker, itemCollection, versionController);
 		String[] excludedElements = cityProperties.loadExcludedElements(skyscrapAR);
-		XMLConverterFactory converterFactory = new XMLConverterFactory(skyscrapAR);
+		XMLConverterFactory converterFactory = new XMLConverterFactory();
 		XMLElement elemCode = elem.getChild("CodeInfo");
 		District cityParent = (District) converterFactory.getPackageItemConverter(excludedElements).convertItem(elemCode, 0, cityDrawer, itemCollection);
-		Treemap map = new Treemap(cityParent, 0, 0, width, height);
-		map.setLayout(new PivotBySplitSize());
-		map.updateLayout(-TREEMAP_WIDTH / 2, -TREEMAP_HEIGHT / 2, TREEMAP_WIDTH, TREEMAP_HEIGHT);
+		City city = new City(cityParent, itemCollection, width, height);
+
 		CoordinateHandler coordinateHandler = new CoordinateHandler(skyscrapAR);
-		TextDrawer textDrawer = new TextDrawer(skyscrapAR, commitLog, itemCollection, versionController);
-		drawController = new DrawController(map, skyscrapAR, colorHandler, coordinateHandler, 
-														cityPicker, textDrawer);
+		TextDrawer textDrawer = new TextDrawer(skyscrapAR, commitLog, city, versionController);
+		drawController = new DrawController(city, skyscrapAR, colorHandler, coordinateHandler, cityPicker, textDrawer);
 		userInputHandler = new UserInputHandler(drawController, coordinateHandler, cityPicker, cityDrawer, versionController);
 		cityProperties.setSize(skyscrapAR);
 	}

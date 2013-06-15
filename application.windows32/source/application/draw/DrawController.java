@@ -1,15 +1,14 @@
 package application.draw;
 
+import model.City;
 import application.CityPicker;
 import application.draw.color.CityColorHandler;
 import application.draw.geometry.CoordinateHandler;
 import processing.core.PApplet;
 import processing.core.PMatrix3D;
-import treemap.Treemap;
 
 public class DrawController {
 
-	private Treemap map;
 	private PApplet applet;
 	private CityColorHandler colorHandler;
 	private CityPicker cityPicker;
@@ -21,11 +20,12 @@ public class DrawController {
 	private int treemapWidth;
 	private boolean recordingActive = false;
 	private TextDrawer textDrawer;
+	private City city;
 	
-	public DrawController(Treemap map, PApplet applet, CityColorHandler colorHandler, 
+	public DrawController(City city, PApplet applet, CityColorHandler colorHandler, 
 			CoordinateHandler coordinateHandler, CityPicker cityPicker,
 			TextDrawer textDrawer) {
-		this.map = map;
+		this.city = city;
 		this.applet = applet;
 		this.colorHandler = colorHandler;
 		this.coordinateHandler = coordinateHandler;
@@ -54,7 +54,7 @@ public class DrawController {
 		applet.box((float) treemapWidth, (float) treemapHeight, 12.0f);
 		applet.popMatrix();
 		applet.stroke(0x33000000);
-		map.draw();
+		city.draw();
 		applet.noLights();
 	}
 

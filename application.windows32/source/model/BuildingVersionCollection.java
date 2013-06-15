@@ -4,14 +4,14 @@ import java.util.HashMap;
 
 import processing.core.PApplet;
 
-public class ClassVersionCollection {
+public class BuildingVersionCollection {
 
-	private HashMap<Integer, ClassVersion> versions;
-    private int maxMethods;
+	private HashMap<Integer, BuildingVersion> versions;
+    private int maxGroundSize;
     
-	public ClassVersionCollection() {
-		versions = new HashMap<Integer, ClassVersion>();
-		maxMethods = 0;
+	public BuildingVersionCollection() {
+		versions = new HashMap<Integer, BuildingVersion>();
+		maxGroundSize = 0;
 	}
 
 	public double getVersionValue(String attr, double version) {
@@ -27,22 +27,22 @@ public class ClassVersionCollection {
 	private int getVersionValue(String attr, int version) {
 		if (version > versions.size())
 			version = versions.size();
-		ClassVersion classVersion = versions.get(new Integer(version));
+		BuildingVersion classVersion = versions.get(new Integer(version));
 		if (classVersion == null)
 			return 0;
 		return classVersion.getValue(attr);
 	}
 
-	public void add(int version, ClassVersion classVersion) {
+	public void add(int version, BuildingVersion classVersion) {
 		versions.put(new Integer(version), classVersion);
-		int methods = classVersion.getValue("methods");
-		if (methods > maxMethods)
-			maxMethods = methods;
+		int groundSize = classVersion.getValue("methods");
+		if (groundSize > maxGroundSize)
+			maxGroundSize = groundSize;
 		
 	}
 
 	public int size() {
-		return maxMethods;
+		return maxGroundSize;
 	}
 
 }

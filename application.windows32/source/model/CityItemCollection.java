@@ -3,10 +3,12 @@ package model;
 import java.text.NumberFormat;
 import java.util.LinkedList;
 
+import treemap.SimpleMapItem;
+
 public class CityItemCollection {
 
 	private LinkedList<CityItem> treemapItems = new LinkedList<CityItem>();
-	private double maxLoc = 0;
+	private double maxGroundSize = 0;
 	private int totalLoc;
 	private int totalObjects;
 	private int totalPackages;
@@ -19,7 +21,6 @@ public class CityItemCollection {
 			return null;
 	}
 	
-
 	public String getInfoText() {
 		return "Packages: "  		+ NumberFormat.getInstance().format(totalPackages)
 				+ " Objects: "		+ NumberFormat.getInstance().format(totalObjects)
@@ -27,9 +28,8 @@ public class CityItemCollection {
 				+ " Total LOC: "	+ NumberFormat.getInstance().format(totalLoc);
 	}
 
-
-	public double getMaxLoc() {
-		return maxLoc;
+	public double getMaxGroundSize() {
+		return maxGroundSize;
 	}
 
 
@@ -45,8 +45,8 @@ public class CityItemCollection {
 
 	public void addBuilding(Building building, int buildingMaxLoc, int maxMethods) {
 		treemapItems.add(building);
-		if (buildingMaxLoc > maxLoc)
-			maxLoc = buildingMaxLoc;
+		if (buildingMaxLoc > maxGroundSize)
+			maxGroundSize = buildingMaxLoc;
 
 		totalLoc += buildingMaxLoc;
 		totalSubroutines += maxMethods;

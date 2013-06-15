@@ -1,27 +1,33 @@
 package model;
 
-import application.SkyscrapAR;
 import application.draw.CityDrawer;
 import treemap.MapLayout;
 import treemap.MapModel;
 import treemap.Mappable;
 import treemap.PivotBySplitSize;
+import treemap.SimpleMapItem;
 
-public class District extends CityItem implements MapModel {
+public class District extends SimpleMapItem implements MapModel, CityItem {
 	private MapLayout algorithm = new PivotBySplitSize();
 	private Mappable[] items;
 	private boolean layoutValid;
 	private CityDrawer cityDrawer;
+	private int index ;
+	private CityItemDescription cityItemDescription;
 
-	public District(String name, int level, Mappable[] items, int itemSize, SkyscrapAR skyscrapAR, 
+	public District(String name, int level, Mappable[] items, int itemSize, 
 				CityDrawer cityDrawer, CityItemCollection cityItemCollection) {
-		super(name, "Package", level, skyscrapAR, cityItemCollection);
+		cityItemDescription = new CityItemDescription(name,  "Package", level);
 		this.items = items;
+		this.index = cityItemCollection.getNextIndex();
 		size = itemSize;
 		this.cityDrawer = cityDrawer;
-		cityItemCollection.addDistrict(this);
 	}
 
+	public String printTitleString() {
+		return cityItemDescription.printTitleString();
+	}
+	
 	public Mappable[] getItems() {
 		return items;
 	}

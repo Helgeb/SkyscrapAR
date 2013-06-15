@@ -1,47 +1,33 @@
 package xmlConversion;
 
-import model.Building;
-import model.CityItem;
-import model.CityItemCollection;
-import model.ClassVersion;
-import model.ClassVersionCollection;
+import model.*;
 import processing.xml.XMLElement;
-import application.SkyscrapAR;
 import application.draw.CityDrawer;
 
 public class XMLConverterClassItem implements XMLConverter {
 	
-	private SkyscrapAR skyscrapAR;
-
-	public XMLConverterClassItem(SkyscrapAR skyscrapAR) {
-		this.skyscrapAR = skyscrapAR;
-	}
+	public XMLConverterClassItem() {}
 	
 	public CityItem convertItem(XMLElement folder, int level, CityDrawer cityDrawer, CityItemCollection cityItemCollection) {
 		XMLElement[] versions = folder.getChildren();
-		ClassVersionCollection classVersionCollection = new ClassVersionCollection();
+		BuildingVersionCollection buildingVersionCollection = new BuildingVersionCollection();
 		int maxLoc = 0;
 		int maxMethods = 0;
 		int lastNum = 0;
 		int lastLoc = 0;
 		int lastMethods = 0;
-		int firstClassVersion = 0;
 		for (XMLElement version : versions) {
 			int num = version.getInt("num");
-			int loc = version.getInt("loc");
-			int methods = version.getInt("methods");
-			classVersionCollection.add(num, new ClassVersion(loc, methods));
+			int buildingHeight = version.getInt("loc");
+			int buildingGroundSize = version.getInt("methods");
+			buildingVersionCollection.add(num, new BuildingVersion(buildingHeight, buildingGroundSize));
 			
 			for (int i = lastNum + 1; i < num; i++) 
-				classVersionCollection.add(i, new ClassVersion(lastLoc, lastMethods));
+				buildingVersionCollection.add(i, new BuildingVersion(lastLoc, lastMethods));
 
 			lastNum = num;
-			lastLoc = loc;
-			lastMethods = methods;
-
-			if (firstClassVersion == 0 && lastMethods > 0) {
-				firstClassVersion = num + 1;
-			}
+			lastLoc = buildingHeight;
+			lastMethods = buildingGroundSize;
 
 			if (lastMethods > maxMethods)
 				maxMethods = lastMethods;
@@ -50,13 +36,7 @@ public class XMLConverterClassItem implements XMLConverter {
 				maxLoc = lastLoc;
 		}
 
-		if (maxMethods > 0) {
-			Building building = new Building(folder.getString("name"), folder.getString("type"), 
-		             level, skyscrapAR, classVersionCollection, cityDrawer, cityItemCollection);
-			cityItemCollection.addBuilding(building, maxLoc, maxMethods);
-			return building;
-
-		} else
-			return null;
+		return CityFactory.createBuilding(folder.getString("name"), folder.getString("type"), 
+	             level, buildingVersionCollection, cityDrawer, cityItemCollection, maxLoc, maxMethods);
 	}
 }

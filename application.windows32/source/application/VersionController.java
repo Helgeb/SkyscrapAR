@@ -10,7 +10,7 @@ public class VersionController {
 	private int maxVersion = -1;
 	private PApplet applet;
 
-	private double TWEENING_TIME_INTERVAL = 1000; // milliseconds
+	private double TWEENING_TIME_INTERVAL = 1000;
 	private int startTime = 0;
 	
 	public VersionController(PApplet applet, int maxVersion){

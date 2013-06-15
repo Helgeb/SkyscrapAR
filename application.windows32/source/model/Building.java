@@ -1,26 +1,28 @@
 package model;
 
 import processing.core.PApplet;
-import application.SkyscrapAR;
+import treemap.SimpleMapItem;
 import application.draw.CityDrawer;
 
-public class Building extends CityItem {
-	ClassVersionCollection versions;
-
+public class Building extends SimpleMapItem implements CityItem {
 	
-	boolean isSelected;
+	private BuildingVersionCollection versions;
+	private CityItemDescription cityItemDescription;
+	private boolean isSelected;
 	private CityDrawer cityDrawer;
+	private int index;
 
-	public Building(String name, String type, int level, SkyscrapAR skyscrapAR, 
-				ClassVersionCollection versions, CityDrawer cityDrawer, CityItemCollection cityItemCollection) {
-		super(name, type, level, skyscrapAR, cityItemCollection);
+	public Building(CityItemDescription cityItemDescription, BuildingVersionCollection versions, CityDrawer cityDrawer, int index) {
+		this.cityItemDescription = cityItemDescription;
+		this.index = index;
 		this.cityDrawer = cityDrawer;
 		this.versions = versions;
 		setSize(versions.size());
 	}
 
-	public String printTitleString(double version) {
-		return super.printTitleString() + "\nLOC:"
+	public String printTitleString() {
+		double version = cityDrawer.getCurrentVersion();
+		return cityItemDescription.printTitleString() + "\nLOC:"
 				+ getIntForVersion("avloc", version) + " methods: "
 				+ getIntForVersion("methods", version);
 	}
@@ -39,9 +41,9 @@ public class Building extends CityItem {
 	
 	public void draw() {
 		double version = cityDrawer.getCurrentVersion();
-		double currentLoc = getIntForVersion("avloc", version);
-		double currentMethods = getIntForVersion("methods", version);
-		cityDrawer.drawBuilding(this.getBounds(), cityItemDescription.getLevel(), currentMethods, currentLoc, 
-				getSize(), cityItemDescription.getType(), this.index, isSelected);
+		double currentHeight = getIntForVersion("avloc", version);
+		double currentGroundSize = getIntForVersion("methods", version);
+		cityDrawer.drawBuilding(this.getBounds(), cityItemDescription.getLevel(), currentGroundSize, currentHeight, 
+				getSize(), cityItemDescription.getType(), index, isSelected);
 	}
 }

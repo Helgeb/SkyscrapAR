@@ -53,7 +53,7 @@ public class CityDrawer {
 		boxWithBounds(bounds.x, bounds.y, (level - 1), bounds.w, bounds.h, 0.02f, CLASS_BASE_RATIO);
 		double boxHeight;
 		if (height != 0) {
-			boxHeight = 1 + (height / cityItemCollection.getMaxLoc()) * CLASS_MAX_HEIGHT;
+			boxHeight = 1 + (height / cityItemCollection.getMaxGroundSize()) * CLASS_MAX_HEIGHT;
 
 			boxHeight *= heightScale;
 			if (boxHeight < 0)

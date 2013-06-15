@@ -1,8 +1,6 @@
 package application;
 
-import model.Building;
-import model.CityItem;
-import model.CityItemCollection;
+import model.*;
 import picking.Picker;
 
 public class CityPicker {

@@ -1,21 +1,13 @@
 package xmlConversion;
 
-import application.SkyscrapAR;
-
 public class XMLConverterFactory {
-
-	private SkyscrapAR skyscrapAR;
-
-	public XMLConverterFactory(SkyscrapAR skyscrapAR) {
-		this.skyscrapAR = skyscrapAR;
-	}
 	
 	public XMLConverter getPackageItemConverter(String[] excludedElements) {
-		return new XMLConverterPackageItem(this, excludedElements, skyscrapAR);
+		return new XMLConverterPackageItem(this, excludedElements);
 	}
 	
 	private XMLConverter getClassItemConverter() {
-		return new XMLConverterClassItem(skyscrapAR);
+		return new XMLConverterClassItem();
 	}
 	
 	public XMLConverter getXMLConverter(String name, String[] excludedElements) {

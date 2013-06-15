@@ -2,6 +2,7 @@ package application;
 
 import processing.core.PApplet;
 import application.draw.DrawController;
+import application.userinput.*;
 
 @SuppressWarnings("serial")
 public class SkyscrapAR extends PApplet {
@@ -27,7 +28,7 @@ public class SkyscrapAR extends PApplet {
 	}
 
 	public void keyPressed() {
-		userInputHandler.keyPressed(key, keyCode, mouseX, mouseY);
+		userInputHandler.keyPressed(new UserCommand(key, keyCode, mouseX, mouseY));
 	}
 	
 	public void mouseClicked() {
