@@ -22,7 +22,6 @@ public class ReactTranslate extends UserCommandReaction {
 
 	@Override
 	public void reactOnCommand(UserCommand command) {
-		if (shoudReactOnCommand(command))
-			coordinateHandler.incPosition(xTranslation,yTranslation,zTranslation);
+		coordinateHandler.incPosition(xTranslation,yTranslation,zTranslation);
 	}
 }

@@ -15,8 +15,7 @@ public class ReactZoom extends UserCommandReaction {
 
 	@Override
 	public void reactOnCommand(UserCommand command) {
-		if (shoudReactOnCommand(command))
-			coordinateHandler.incZoomFactor(zoomIncrement);
+		coordinateHandler.incZoomFactor(zoomIncrement);
 	}
 
 }

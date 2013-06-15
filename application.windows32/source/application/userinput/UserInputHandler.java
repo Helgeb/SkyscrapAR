@@ -46,7 +46,7 @@ public class UserInputHandler {
 
 	public void keyPressed(UserCommand userCommand) {
 		for (UserCommandReaction reaction: userCommandReations) 
-			reaction.reactOnCommand(userCommand);
+			reaction.reactOnMatchingCommand(userCommand);
 		
 		if (userCommand.equals(new UserCommand('s'))) {
 			cityDrawer.incHeightScale(-0.1f);
